@@ -5,42 +5,243 @@
 }
 
 body {
-    font-family: Arial, sans-serif;
-    background-color: #0f3460;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #0f3460 0%, #16213e 100%);
     color: white;
+    min-height: 100vh;
 }
 
-.contenedor {
+/* CONTENEDOR PRINCIPAL - FLEXBOX */
+.contenedor-principal {
+    display: flex;
+    gap: 20px;
+    padding: 20px;
+    min-height: 100vh;
+    flex-wrap: wrap;
+}
+
+/* BLOQUES */
+.bloc {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    padding: 20px;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+.bloc h2 {
+    margin-bottom: 20px;
+    text-align: center;
+    font-size: 1.5rem;
+}
+
+/* BLOC 1 - Configuració */
+.bloc-1 {
+    flex: 0 0 300px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.form-group label {
+    font-size: 0.9rem;
+    color: #e0e0e0;
+}
+
+.form-group input {
+    padding: 10px;
+    border: none;
+    border-radius: 6px;
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+    font-size: 1rem;
+}
+
+.form-group input:focus {
+    outline: 2px solid #e94560;
+}
+
+/* BLOC 2 - Taulell */
+.bloc-2 {
+    flex: 1;
+    min-width: 400px;
     display: flex;
     flex-direction: column;
     align-items: center;
+}
+
+.tablero {
+    display: grid;
+    gap: 2px;
+    background: rgba(0, 0, 0, 0.3);
+    padding: 10px;
+    border-radius: 8px;
+}
+
+.casilla {
+    width: 40px;
+    height: 40px;
+    background: #2a5298;
+    border: 1px solid #1e3a5f;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
     justify-content: center;
-    min-height: 100vh;
-    gap: 20px;
-}
-
-h1 {
-    font-size: 3rem;
-}
-
-button {
-    padding: 15px 30px;
     font-size: 1.2rem;
-    background-color: #e94560;
-    color: white;
+}
+
+.casilla:hover {
+    background: #3d6cb9;
+    transform: scale(1.05);
+}
+
+.casilla.agua {
+    background: #1e3a5f;
+    cursor: not-allowed;
+}
+
+.casilla.tocado {
+    background: #e94560;
+}
+
+.casilla.hundido {
+    background: #8b0000;
+}
+
+/* BLOC 3 - Estadístiques */
+.bloc-3 {
+    flex: 0 0 300px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.stat {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 6px;
+}
+
+.stat-label {
+    color: #e0e0e0;
+}
+
+.stat-value {
+    font-weight: bold;
+    color: #e94560;
+    font-size: 1.1rem;
+}
+
+/* BOTONS */
+.btn-primary, .btn-secondary {
+    padding: 12px 24px;
     border: none;
     border-radius: 8px;
+    font-size: 1rem;
     cursor: pointer;
+    transition: all 0.3s;
+    font-weight: bold;
 }
 
-button:hover {
-    background-color: #c23b52;
+.btn-primary {
+    background: #e94560;
+    color: white;
 }
 
-#resultat {
-    padding: 20px;
-    background-color: rgba(255,255,255,0.1);
+.btn-primary:hover {
+    background: #c23b52;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(233, 69, 96, 0.4);
+}
+
+.btn-secondary {
+    background: #f39c12;
+    color: white;
+    width: 100%;
+}
+
+.btn-secondary:hover {
+    background: #d68910;
+}
+
+/* BANNERS */
+.banner {
+    margin-top: auto;
+    padding: 15px;
+    background: rgba(233, 69, 96, 0.2);
     border-radius: 8px;
-    min-width: 300px;
     text-align: center;
+    border: 1px solid rgba(233, 69, 96, 0.3);
+}
+
+/* RESPONSIVE - TABLET */
+@media (max-width: 1024px) {
+    .contenedor-principal {
+        flex-direction: column;
+    }
+    
+    .bloc-1 {
+        flex: 1 0 auto;
+    }
+    
+    .bloc-3 {
+        flex: 1 0 auto;
+        flex-direction: row;
+        flex-wrap: wrap;
+    }
+    
+    .bloc-3 .stat {
+        flex: 1 1 45%;
+    }
+    
+    .bloc-3 .banner {
+        display: none;
+    }
+}
+
+/* RESPONSIVE - MÒBIL */
+@media (max-width: 768px) {
+    .contenedor-principal {
+        flex-direction: column;
+    }
+    
+    .bloc {
+        flex: 1 0 auto;
+    }
+    
+    .bloc-1 .form-group {
+        flex-direction: row;
+        align-items: center;
+    }
+    
+    .bloc-1 .form-group label {
+        flex: 0 0 120px;
+    }
+    
+    .bloc-3 {
+        flex-direction: row;
+        flex-wrap: wrap;
+    }
+    
+    .bloc-3 .stat {
+        flex: 1 1 45%;
+    }
+    
+    .banner {
+        display: none;
+    }
+    
+    .casilla {
+        width: 30px;
+        height: 30px;
+    }
 }
