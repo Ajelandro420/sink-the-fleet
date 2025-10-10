@@ -66,6 +66,8 @@ function dispararCasilla(fila, columna, casilla) {
     if (random > 0.7) {
         casilla.classList.add('tocado');
         casilla.textContent = '💥';
+        document.getElementById('encerts').textContent =
+            parseInt(document.getElementById('encerts').textContent) + 1;
     } else {
         casilla.classList.add('agua');
         casilla.textContent = '💧';
@@ -74,4 +76,9 @@ function dispararCasilla(fila, columna, casilla) {
     // Actualizar stats (simulado)
     document.getElementById('dispars').textContent = 
         parseInt(document.getElementById('dispars').textContent) + 1;
+
+
+    // Desactiva botón
+    casilla.classList.add('disparada');
+    casilla.style.cursor = 'not-allowed';
 }

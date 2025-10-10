@@ -245,3 +245,8 @@ body {
         height: 30px;
     }
 }
+
+.casilla.disparada {
+    pointer-events: none;  /* Desactiva completamente el click */
+    opacity: 0.9;
+}
