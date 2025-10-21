@@ -188,21 +188,21 @@ body {
     .contenedor-principal {
         flex-direction: column;
     }
-    
+
     .bloc-1 {
         flex: 1 0 auto;
     }
-    
+
     .bloc-3 {
         flex: 1 0 auto;
         flex-direction: row;
         flex-wrap: wrap;
     }
-    
+
     .bloc-3 .stat {
         flex: 1 1 45%;
     }
-    
+
     .bloc-3 .banner {
         display: none;
     }
@@ -213,33 +213,33 @@ body {
     .contenedor-principal {
         flex-direction: column;
     }
-    
+
     .bloc {
         flex: 1 0 auto;
     }
-    
+
     .bloc-1 .form-group {
         flex-direction: row;
         align-items: center;
     }
-    
+
     .bloc-1 .form-group label {
         flex: 0 0 120px;
     }
-    
+
     .bloc-3 {
         flex-direction: row;
         flex-wrap: wrap;
     }
-    
+
     .bloc-3 .stat {
         flex: 1 1 45%;
     }
-    
+
     .banner {
         display: none;
     }
-    
+
     .casilla {
         width: 30px;
         height: 30px;
@@ -249,4 +249,19 @@ body {
 .casilla.disparada {
     pointer-events: none;  /* Desactiva completamente el click */
     opacity: 0.9;
+}
+#mensajeVictoria {
+    position: absolute;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #e94560;
+    color: white;
+    padding: 15px 25px;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+    font-size: 1.2rem;
+    font-weight: bold;
+    z-index: 100;
+    text-align: center;
 }

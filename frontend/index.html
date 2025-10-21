@@ -7,74 +7,48 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="contenedor-principal">
-        
-        <!-- BLOC 1: Configuració -->
-        <div class="bloc bloc-1" id="bloc1">
-            <h2>⚙️ Configuració</h2>
-            <form id="formConfig">
-                <div class="form-group">
-                    <label for="files">Files (7-20):</label>
-                    <input type="number" id="files" min="7" max="20" value="10" required>
-                </div>
-                
-                <div class="form-group">
-                    <label for="columnes">Columnes (7-20):</label>
-                    <input type="number" id="columnes" min="7" max="20" value="10" required>
-                </div>
-                
-                <div class="form-group">
-                    <label for="jugador">Nom (opcional):</label>
-                    <input type="text" id="jugador" placeholder="Anònim">
-                </div>
-                
-                <button type="button" id="btnComencar" class="btn-primary">Començar Partida</button>
-            </form>
-            
-            <div class="banner">
-                <p>🎮 Enfonsa tots els vaixells!</p>
+<div class="contenedor-principal">
+    <!-- Configuración -->
+    <div class="bloc bloc-1" id="bloc1">
+        <h2>⚙️ Configuració</h2>
+        <form id="formConfig">
+            <div class="form-group">
+                <label for="files">Files (7-20):</label>
+                <input type="number" id="files" min="7" max="20" value="10" required>
             </div>
-        </div>
-        
-        <!-- BLOC 2: Taulell -->
-        <div class="bloc bloc-2" id="bloc2" style="display: none;">
-            <h2>🎯 Taulell de Joc</h2>
-            <div id="tablero" class="tablero">
+            <div class="form-group">
+                <label for="columnes">Columnes (7-20):</label>
+                <input type="number" id="columnes" min="7" max="20" value="10" required>
             </div>
-        </div>
-        
-        <!-- BLOC 3: Estadístiques -->
-        <div class="bloc bloc-3" id="bloc3" style="display: none;">
-            <h2>📊 Estadístiques</h2>
-            
-            <div class="stat">
-                <span class="stat-label">Dispars:</span>
-                <span class="stat-value" id="dispars">0</span>
+            <div class="form-group">
+                <label for="jugador">Nom (opcional):</label>
+                <input type="text" id="jugador" placeholder="Anònim">
             </div>
-            
-            <div class="stat">
-                <span class="stat-label">Encerts:</span>
-                <span class="stat-value" id="encerts">0</span>
-            </div>
-            
-            <div class="stat">
-                <span class="stat-label">Vaixells enfonsats:</span>
-                <span class="stat-value" id="enfonsats">0</span>
-            </div>
-            
-            <div class="stat">
-                <span class="stat-label">Puntuació:</span>
-                <span class="stat-value" id="puntuacio">0</span>
-            </div>
-            
-            <div class="stat">
-                <span class="stat-label">Millor puntuació:</span>
-                <span class="stat-value" id="millorPuntuacio">---</span>
-            </div>
-            
-            <button class="btn-secondary" id="btnAbandonar">Abandonar</button>
+            <button type="button" id="btnComencar" class="btn-primary">Començar Partida</button>
+        </form>
+        <div class="banner">
+            <p>🎮 Enfonsa tots els vaixells!</p>
         </div>
     </div>
-</body>
+
+    <!-- Tablero -->
+    <div class="bloc bloc-2" id="bloc2" style="display:none;">
+        <h2>🎯 Taulell de Joc</h2>
+        <div id="tablero" class="tablero"></div>
+    </div>
+
+    <!-- Estadísticas -->
+    <div class="bloc bloc-3" id="bloc3" style="display:none;">
+        <h2>📊 Estadístiques</h2>
+        <div class="stat"><span class="stat-label">Dispars:</span><span class="stat-value" id="dispars">0</span></div>
+        <div class="stat"><span class="stat-label">Encerts:</span><span class="stat-value" id="encerts">0</span></div>
+        <div class="stat"><span class="stat-label">Vaixells enfonsats:</span><span class="stat-value" id="enfonsats">0</span></div>
+        <div class="stat"><span class="stat-label">Puntuació:</span><span class="stat-value" id="puntuacio">0</span></div>
+        <div class="stat"><span class="stat-label">Millor puntuació:</span><span class="stat-value" id="millorPuntuacio">---</span></div>
+        <button class="btn-secondary" id="btnAbandonar">Abandonar</button>
+    </div>
+</div>
+<div id="mensajeVictoria" style="display:none;"></div>
 <script src="app.js"></script>
+</body>
 </html>
