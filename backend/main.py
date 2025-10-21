@@ -1,6 +1,7 @@
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, conint
+import math
 import random
 
 app = FastAPI()
@@ -24,6 +25,8 @@ class Tablero:
         self.columnas = columnas
         self.grid = [[0 for _ in range(columnas)] for _ in range(filas)]
         self.barcos = []
+        self.casillas_objetivo = math.floor(0.3*(filas * columnas))
+        self.casillas_ocupadas = 0
 
     def colocar_barco_aleatorio(self, tamaño):
         while True:
@@ -46,6 +49,13 @@ class Tablero:
     def generar_barcos_basicos(self):
         for tamaño in [1, 2, 3, 4, 5]:
             self.colocar_barco_aleatorio(tamaño)
+            self.casillas_ocupadas += tamaño
+            
+        while self.casillas_ocupadas < self.casillas_objetivo:
+            tamaño = random.randint(1, 5)
+            self.colocar_barco_aleatorio(tamaño)
+            self.casillas_ocupadas += tamaño
+
 
     def disparar(self, fila, col):
         if self.grid[fila][col] > 0:
@@ -70,7 +80,7 @@ async def crear_partida(partida: Partida):
     global tablero, estadisticas
     tablero = Tablero(partida.filas, partida.columnas)
     tablero.generar_barcos_basicos()
-    estadisticas = {'dispars':0, 'encerts':0, 'vaixells_hundidos':0, 'puntuacio':0}
+    estadisticas = {'dispars':0, 'encerts':0, 'vaixells_hundidos':0, 'puntuacio':0, 'casillas_ocupadas': tablero.casillas_ocupadas}
     return {
         "estat": "Partida creada",
         "filas": partida.filas,

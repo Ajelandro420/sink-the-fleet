@@ -7,10 +7,15 @@ const bloc2 = document.getElementById('bloc2');
 const bloc3 = document.getElementById('bloc3');
 const tableroDiv = document.getElementById('tablero');
 const mensajeVictoria = document.getElementById('mensajeVictoria');
+let totalCasillas = 0;
+let dificultad = 0;
 
 document.getElementById('btnComencar').addEventListener('click', async () => {
     const filas = parseInt(document.getElementById('files').value);
     const columnas = parseInt(document.getElementById('columnes').value);
+    totalCasillas = filas * columnas;
+    dificultad = document.querySelector('input[name="dificultat"]:checked').value;
+
     jugador = document.getElementById('jugador').value || "Anònim";
 
     try {
@@ -46,8 +51,21 @@ function generarTablero(filas,columnas){
     }
 }
 
+function perder() {
+    mensajeVictoria.textContent=`¡Lo siento, ${jugador}! Has alcanzado el límite de disparos.`;
+    mensajeVictoria.style.display='block';
+    setTimeout(()=>mensajeVictoria.style.display='none',3000);
+    document.querySelectorAll('.casilla').forEach(c=>c.classList.add('disparada'));
+}
+function ganar() {
+    mensajeVictoria.textContent=`¡Felicidades, ${jugador}! Has hundido todos los barcos.`;
+    mensajeVictoria.style.display='block';
+    setTimeout(()=>mensajeVictoria.style.display='none',3000);
+    document.querySelectorAll('.casilla').forEach(c=>c.classList.add('disparada'));
+}
+
 async function dispararCasilla(fila,columna,casilla){
-    if(casilla.classList.contains('disparada')) return;
+    if(casilla.classList.contains('disparada') || casilla.classList.contains('hundido')) return;
 
     try{
         const r=await fetch(`${API_URL}/disparar?fila=${fila}&columna=${columna}`,{method:'POST'});
@@ -67,14 +85,26 @@ async function dispararCasilla(fila,columna,casilla){
         document.getElementById('puntuacio').textContent=data.puntuacio;
 
         // Ganar
-        if(data.vaixells_hundidos>=5){
-            mensajeVictoria.textContent=`¡Felicidades, ${jugador}! Has hundido todos los barcos.`;
-            mensajeVictoria.style.display='block';
-            setTimeout(()=>mensajeVictoria.style.display='none',3000);
-
-            document.querySelectorAll('.casilla').forEach(c=>c.classList.add('disparada'));
+        if(data.encerts === data.casillas_ocupadas){
+            ganar();
         }
-
-    } catch(e){console.error(e);}
-    
+        // Perder
+        switch (dificultad) {
+            case '1':
+                if (Number(data.dispars)>= totalCasillas*0.7){
+                    perder();
+                    break;
+                }
+            case '2':
+                if (Number(data.dispars)>= totalCasillas*0.6){
+                    perder();
+                    break;
+                }
+            case '3':
+                if (Number(data.dispars)>= totalCasillas*0.5){
+                    perder();
+                    break;
+                }
+        }
+    } catch(e){console.error(e);} 
 }
