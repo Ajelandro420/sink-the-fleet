@@ -27,6 +27,23 @@ document.getElementById('btnComencar').addEventListener('click', async () => {
         mostrarBlocs(filas,columnas);
     } catch(e){console.error(e);}
 });
+document.getElementById('btnAbandonar').addEventListener('click', reiniciarJuego);
+function reiniciarJuego() {
+    bloc2.style.display = "none";
+    bloc3.style.display = "none";
+    bloc1.style.display = "flex";
+
+    tableroDiv.innerHTML = "";
+
+    // Restablecer stats
+    document.getElementById('dispars').textContent = "0";
+    document.getElementById('encerts').textContent = "0";
+    document.getElementById('enfonsats').textContent = "0";
+    document.getElementById('puntuacio').textContent = "0";
+
+    // Ocultar mensaje de victoria
+    mensajeVictoria.style.display = "none";
+}
 
 function mostrarBlocs(filas,columnas){
     bloc1.style.display="none";
