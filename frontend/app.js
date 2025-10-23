@@ -110,18 +110,21 @@ async function dispararCasilla(fila,columna,casilla){
             case '1':
                 if (Number(data.dispars)>= totalCasillas*0.7){
                     perder();
-                    break;
                 }
+                break;
+
             case '2':
                 if (Number(data.dispars)>= totalCasillas*0.6){
                     perder();
-                    break;
                 }
+                break;
+
             case '3':
                 if (Number(data.dispars)>= totalCasillas*0.5){
                     perder();
-                    break;
                 }
+                break;
+                
         }
     } catch(e){console.error(e);} 
 }
