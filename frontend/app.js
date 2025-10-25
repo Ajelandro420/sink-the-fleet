@@ -1,20 +1,40 @@
 const API_URL = "http://localhost:8000";
 let jugador = "Anònim";
-
-// DOM
-const bloc1 = document.getElementById('bloc1');
-const bloc2 = document.getElementById('bloc2');
-const bloc3 = document.getElementById('bloc3');
-const tableroDiv = document.getElementById('tablero');
-const mensajeVictoria = document.getElementById('mensajeVictoria');
 let totalCasillas = 0;
 let dificultad = 0;
+
+let bloc1, bloc2, bloc3, tableroDiv, mensajeVictoria, sonidos = {};
+
+document.addEventListener('DOMContentLoaded', () => {
+    bloc1 = document.getElementById('bloc1');
+    bloc2 = document.getElementById('bloc2');
+    bloc3 = document.getElementById('bloc3');
+    tableroDiv = document.getElementById('tablero');
+    mensajeVictoria = document.getElementById('mensajeVictoria');
+
+    // EZ DJ
+    sonidos = {
+        tocado: document.getElementById('hit'),
+        hundido: document.getElementById('sunken'),
+        agua: document.getElementById('miss'),
+        ganar: document.getElementById('win'),
+        perder: document.getElementById('lose')
+    };
+}); 
+
+function reproducirSonido(tipo) {
+    if (sonidos[tipo]) {
+        sonidos[tipo].currentTime = 0; // Reinicia el sonido
+        sonidos[tipo].play().catch(e => console.log('Error reproduciendo sonido:', e));
+    }
+}
 
 document.getElementById('btnComencar').addEventListener('click', async () => {
     const filas = parseInt(document.getElementById('files').value);
     const columnas = parseInt(document.getElementById('columnes').value);
     totalCasillas = filas * columnas;
     dificultad = document.querySelector('input[name="dificultat"]:checked').value;
+
 
     jugador = document.getElementById('jugador').value || "Anònim";
 
@@ -69,12 +89,14 @@ function generarTablero(filas,columnas){
 }
 
 function perder() {
+    reproducirSonido('perder');
     mensajeVictoria.textContent=`¡Lo siento, ${jugador}! Has alcanzado el límite de disparos.`;
     mensajeVictoria.style.display='block';
     setTimeout(()=>mensajeVictoria.style.display='none',3000);
     document.querySelectorAll('.casilla').forEach(c=>c.classList.add('disparada'));
 }
 function ganar() {
+    reproducirSonido('ganar');
     mensajeVictoria.textContent=`¡Felicidades, ${jugador}! Has hundido todos los barcos.`;
     mensajeVictoria.style.display='block';
     setTimeout(()=>mensajeVictoria.style.display='none',3000);
@@ -91,9 +113,21 @@ async function dispararCasilla(fila,columna,casilla){
         casilla.classList.add('disparada');
         casilla.style.cursor='not-allowed';
 
-        if(data.resultado==='tocado') {casilla.classList.add('tocado'); casilla.textContent='💥';}
-        else if(data.resultado==='hundido') {casilla.classList.add('hundido'); casilla.textContent='☠️';}
-        else {casilla.classList.add('agua'); casilla.textContent='💧';}
+        if(data.resultado==='tocado') {
+            casilla.classList.add('tocado'); 
+            casilla.textContent='💥';
+            reproducirSonido('tocado');
+        }   
+        else if(data.resultado==='hundido') {
+            casilla.classList.add('hundido');
+            casilla.textContent='☠️';
+            reproducirSonido('hundido');
+        }
+        else {
+            casilla.classList.add('agua');
+            casilla.textContent='💧';
+            reproducirSonido('agua');
+        }
 
         // Stats
         document.getElementById('dispars').textContent=data.dispars;
@@ -108,20 +142,22 @@ async function dispararCasilla(fila,columna,casilla){
         // Perder
         switch (dificultad) {
             case '1':
-                if (Number(data.dispars)>= totalCasillas*0.7){
-                    perder();
-                    break;
-                }
-            case '2':
                 if (Number(data.dispars)>= totalCasillas*0.6){
                     perder();
-                    break;
                 }
-            case '3':
+                break;
+
+            case '2':
                 if (Number(data.dispars)>= totalCasillas*0.5){
                     perder();
-                    break;
                 }
-        }
+                break;
+
+            case '3':
+                if (Number(data.dispars)>= totalCasillas*0.32){
+                    perder();
+                }
+                break;
+            }
     } catch(e){console.error(e);} 
 }
