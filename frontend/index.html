@@ -35,13 +35,12 @@
             <button type="button" id="btnComencar" class="btn-primary">Començar Partida</button>
         </form>
         <div class="banner">
-            <p>🎮 Enfonsa tots els vaixells!</p>
+            <p>¡Elimina la flota enemiga!</p>
         </div>
     </div>
 
     <!-- Tablero -->
     <div class="bloc bloc-2" id="bloc2" style="display:none;">
-        <h2>🎯 Taulell de Joc</h2>
         <div id="tablero" class="tablero"></div>
     </div>
 
@@ -58,5 +57,10 @@
 </div>
 <div id="mensajeVictoria" style="display:none;"></div>
 <script src="app.js"></script>
+    <audio id="hit" src="assets/hit.mp3" preload="auto"></audio>
+    <audio id="sunken" src="assets/sunken.mp3" preload="auto"></audio>
+    <audio id="miss" src="assets/miss.mp3" preload="auto"></audio>
+    <audio id="win" src="assets/win.mp3" preload="auto"></audio>
+    <audio id="lose" src="assets/lose.mp3" preload="auto"></audio>
 </body>
 </html>
