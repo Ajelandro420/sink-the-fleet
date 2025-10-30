@@ -13,6 +13,9 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+# --- Carpeta de logs ---
+LOG_DIR = "logs"
+os.makedirs(LOG_DIR, exist_ok=True)
 
 class Partida(BaseModel):
     filas: conint(ge=7, le=20)
@@ -71,6 +74,55 @@ class Tablero:
 tablero = None
 estadisticas = {'dispars':0, 'encerts':0, 'vaixells_hundidos':0, 'puntuacio':0}
 
+# --- Funciones de log ---
+def crear_log(jugador, filas, columnas):
+    global partida_id
+    partida_id = str(uuid.uuid4())
+    log_data = {
+        "id_partida": partida_id,
+        "jugador": jugador,
+        "filas": filas,
+        "columnas": columnas,
+        "movimientos": [],
+        "fecha_inicio": datetime.now().isoformat()
+    }
+    path = os.path.join(LOG_DIR, f"{partida_id}.json")
+    with open(path, "w") as f:
+        json.dump(log_data, f, indent=2)
+    return partida_id
+
+
+def log_disparo(fila, columna, resultado):
+    if not partida_id:
+        return
+    path = os.path.join(LOG_DIR, f"{partida_id}.json")
+    with open(path, "r") as f:
+        log_data = json.load(f)
+    log_data["movimientos"].append({
+        "fila": fila,
+        "columna": columna,
+        "resultado": resultado,
+        "hora": datetime.now().isoformat()
+    })
+    with open(path, "w") as f:
+        json.dump(log_data, f, indent=2)
+
+
+def finalizar_log(victoria, puntuacion):
+    """Guarda el resultado final de la partida en el log."""
+    if not partida_id:
+        return
+    path = os.path.join(LOG_DIR, f"{partida_id}.json")
+    with open(path, "r") as f:
+        log_data = json.load(f)
+    log_data["final"] = {
+        "victoria": victoria,
+        "puntuacion": puntuacion,
+        "hora_fin": datetime.now().isoformat()
+    }
+    with open(path, "w") as f:
+        json.dump(log_data, f, indent=2)
+
 @app.get("/prova")
 async def prova():
     return {"estat": "ok"}
@@ -80,14 +132,20 @@ async def crear_partida(partida: Partida):
     global tablero, estadisticas
     tablero = Tablero(partida.filas, partida.columnas)
     tablero.generar_barcos_basicos()
-    estadisticas = {'dispars':0, 'encerts':0, 'vaixells_hundidos':0, 'puntuacio':0, 'casillas_ocupadas': tablero.casillas_ocupadas}
+    estadisticas = {
+        'dispars': 0,
+        'encerts': 0,
+        'vaixells_hundidos': 0,
+        'puntuacio': 0
+    }
+    crear_log(partida.jugador, partida.filas, partida.columnas)
     return {
         "estat": "Partida creada",
         "filas": partida.filas,
         "columnas": partida.columnas,
-        "jugador": partida.jugador
+        "jugador": partida.jugador,
+        "id_partida": partida_id
     }
-
 @app.post("/disparar")
 async def disparar(fila: int, columna: int):
     global estadisticas
@@ -96,10 +154,46 @@ async def disparar(fila: int, columna: int):
 
     resultado = tablero.disparar(fila, columna)
     estadisticas['dispars'] += 1
-    if resultado in ['tocado','hundido']:
+    if resultado in ['tocado', 'hundido']:
         estadisticas['encerts'] += 1
     if resultado == 'hundido':
         estadisticas['vaixells_hundidos'] += 1
-    estadisticas['puntuacio'] = estadisticas['encerts']*10
+    estadisticas['puntuacio'] = estadisticas['encerts'] * 10
 
-    return {**estadisticas, "resultado": resultado}
+    log_disparo(fila, columna, resultado)
+
+    victoria = estadisticas['vaixells_hundidos'] == len(tablero.barcos)
+    if victoria:
+        finalizar_log(True, estadisticas['puntuacio'])
+
+    return {**estadisticas, "resultado": resultado, "victoria": victoria}
+@app.get("/ranking")
+async def ranking():
+    """Devuelve el top 10 de jugadores con mayor puntuación."""
+    resultados = []
+    for f in os.listdir(LOG_DIR):
+        with open(os.path.join(LOG_DIR, f)) as archivo:
+            data = json.load(archivo)
+            if "final" in data:
+                resultados.append({
+                    "jugador": data["jugador"],
+                    "puntuacion": data["final"]["puntuacion"],
+                    "fecha": data["fecha_inicio"]
+                })
+    resultados.sort(key=lambda x: x["puntuacion"], reverse=True)
+    return resultados[:10]
+@app.get("/ranking")
+async def get_ranking():
+    registros = []
+    for file in os.listdir(LOG_DIR):
+        if file.endswith(".json"):
+            path = os.path.join(LOG_DIR, file)
+            with open(path, "r") as f:
+                data = json.load(f)
+                puntuacion = len([m for m in data.get("movimientos", []) if m["resultado"] in ["tocado", "hundido"]]) * 10
+                registros.append({
+                    "jugador": data.get("jugador", "Anònim"),
+                    "puntuacion": puntuacion
+                })
+    registros.sort(key=lambda x: x["puntuacion"], reverse=True)
+    return registros[:10]

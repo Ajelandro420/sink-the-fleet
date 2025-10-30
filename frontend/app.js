@@ -102,6 +102,16 @@ function ganar() {
     setTimeout(()=>mensajeVictoria.style.display='none',3000);
     document.querySelectorAll('.casilla').forEach(c=>c.classList.add('disparada'));
 }
+async function mostrarRanking() {
+    try {
+        const res = await fetch(`${API_URL}/ranking`);
+        const ranking = await res.json();
+        const lista = document.getElementById("ranking");
+        lista.innerHTML = ranking
+            .map((r, i) => `<li>${i + 1}. ${r.jugador} - ${r.puntuacion} pts</li>`)
+            .join("");
+    } catch(e){ console.error("Error al obtener ranking", e); }
+}
 
 async function dispararCasilla(fila,columna,casilla){
     if(casilla.classList.contains('disparada') || casilla.classList.contains('hundido')) return;
@@ -134,6 +144,28 @@ async function dispararCasilla(fila,columna,casilla){
         document.getElementById('encerts').textContent=data.encerts;
         document.getElementById('enfonsats').textContent=data.vaixells_hundidos;
         document.getElementById('puntuacio').textContent=data.puntuacio;
+
+        //  SISTEMA DE RANKING
+        async function cargarRanking() {
+            try {
+                const res = await fetch(`${API_URL}/ranking`);
+                const data = await res.json();
+
+                const rankingList = document.getElementById("ranking");
+                rankingList.innerHTML = "";
+
+                data.slice(0, 5).forEach((item, i) => {
+                    const li = document.createElement("li");
+                    li.textContent = `${i + 1}. ${item.jugador} — ${item.puntuacion} pts`;
+                    rankingList.appendChild(li);
+                });
+            } catch (e) {
+                console.error("Error cargando ranking:", e);
+            }
+        }
+
+// Cargar ranking automáticamente al entrar al juego
+        document.addEventListener("DOMContentLoaded", cargarRanking);
 
         // Ganar
         if(data.encerts === data.casillas_ocupadas){
