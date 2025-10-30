@@ -10,7 +10,6 @@
 <div class="contenedor-principal">
     <!-- Configuración -->
     <div class="bloc bloc-1" id="bloc1">
-        <h2>⚙️ Configuració</h2>
         <form id="formConfig">
             <div class="form-group">
                 <label for="files">Files (7-20):</label>
@@ -26,11 +25,11 @@
             </div>
             <div>
                 <input type="radio" id="facil" name="dificultat" value="1" />
-                    <label for="facil">Fàcil</label>
+                <label for="facil">Fàcil</label>
                 <input type="radio" id="mitja" name="dificultat" value="2" />
-                    <label for="mitja">Mitjana</label>
+                <label for="mitja">Mitjana</label>
                 <input type="radio" id="dificil" name="dificultat" value="3" />
-                    <label for="dificil">Difícil</label>
+                <label for="dificil">Difícil</label>
             </div>
             <button type="button" id="btnComencar" class="btn-primary">Començar Partida</button>
         </form>
@@ -51,16 +50,18 @@
         <div class="stat"><span class="stat-label">Encerts:</span><span class="stat-value" id="encerts">0</span></div>
         <div class="stat"><span class="stat-label">Vaixells enfonsats:</span><span class="stat-value" id="enfonsats">0</span></div>
         <div class="stat"><span class="stat-label">Puntuació:</span><span class="stat-value" id="puntuacio">0</span></div>
-        <div class="stat"><span class="stat-label">Millor puntuació:</span><span class="stat-value" id="millorPuntuacio">---</span></div>
         <button class="btn-secondary" id="btnAbandonar">Abandonar</button>
     </div>
 </div>
-<div id="mensajeVictoria" style="display:none;"></div>
+
+<div id="mensajeVictoria"></div>
+<div id="ranking"></div>
+
 <script src="app.js"></script>
-    <audio id="hit" src="assets/hit.mp3" preload="auto"></audio>
-    <audio id="sunken" src="assets/sunken.mp3" preload="auto"></audio>
-    <audio id="miss" src="assets/miss.mp3" preload="auto"></audio>
-    <audio id="win" src="assets/win.mp3" preload="auto"></audio>
-    <audio id="lose" src="assets/lose.mp3" preload="auto"></audio>
+<audio id="hit" src="assets/hit.mp3" preload="auto"></audio>
+<audio id="sunken" src="assets/sunken.mp3" preload="auto"></audio>
+<audio id="miss" src="assets/miss.mp3" preload="auto"></audio>
+<audio id="win" src="assets/win.mp3" preload="auto"></audio>
+<audio id="lose" src="assets/lose.mp3" preload="auto"></audio>
 </body>
 </html>

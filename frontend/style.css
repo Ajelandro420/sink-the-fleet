@@ -35,7 +35,7 @@ body {
     font-size: 1.5rem;
 }
 
-/* BLOC 1 - Configuració */
+/* BLOC 1 - Configuración */
 .bloc-1 {
     flex: 0 0 300px;
     display: flex;
@@ -67,7 +67,7 @@ body {
     outline: 2px solid #e94560;
 }
 
-/* BLOC 2 - Taulell */
+/* BLOC 2 - Tablero */
 .bloc-2 {
     flex: 1;
     min-width: 400px;
@@ -115,7 +115,12 @@ body {
     background: #8b0000;
 }
 
-/* BLOC 3 - Estadístiques */
+.casilla.disparada {
+    pointer-events: none;
+    opacity: 0.9;
+}
+
+/* BLOC 3 - Estadísticas y ranking */
 .bloc-3 {
     flex: 0 0 300px;
     display: flex;
@@ -141,7 +146,32 @@ body {
     font-size: 1.1rem;
 }
 
-/* BOTONS */
+/* Ranking */
+#ranking {
+    background: rgba(0,0,0,0.25);
+    padding: 15px;
+    border-radius: 8px;
+    max-height: 250px;
+    overflow-y: auto;
+    border: 1px solid rgba(233, 69, 96, 0.3);
+}
+
+#ranking h3 {
+    text-align: center;
+    margin-bottom: 10px;
+    color: #ffd700;
+}
+
+#ranking ul {
+    list-style: none;
+}
+
+#ranking li {
+    padding: 5px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+
+/* Botones */
 .btn-primary, .btn-secondary {
     padding: 12px 24px;
     border: none;
@@ -173,7 +203,7 @@ body {
     background: #d68910;
 }
 
-/* BANNERS */
+/* Banners */
 .banner {
     margin-top: auto;
     padding: 15px;
@@ -183,32 +213,49 @@ body {
     border: 1px solid rgba(233, 69, 96, 0.3);
 }
 
+/* Mensaje victoria/derrota */
+#mensajeVictoria {
+    position: absolute;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #e94560;
+    color: white;
+    padding: 15px 25px;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+    font-size: 1.2rem;
+    font-weight: bold;
+    z-index: 100;
+    text-align: center;
+}
+
 /* RESPONSIVE - TABLET */
 @media (max-width: 1024px) {
     .contenedor-principal {
         flex-direction: column;
     }
 
-    .bloc-1 {
+    .bloc-1, .bloc-3 {
         flex: 1 0 auto;
     }
 
     .bloc-3 {
-        flex: 1 0 auto;
         flex-direction: row;
         flex-wrap: wrap;
+        gap: 10px;
     }
 
-    .bloc-3 .stat {
+    .bloc-3 .stat, #ranking {
         flex: 1 1 45%;
     }
 
-    .bloc-3 .banner {
+    .banner {
         display: none;
     }
 }
 
-/* RESPONSIVE - MÒBIL */
+/* RESPONSIVE - MÓVIL */
 @media (max-width: 768px) {
     .contenedor-principal {
         flex-direction: column;
@@ -228,40 +275,15 @@ body {
     }
 
     .bloc-3 {
-        flex-direction: row;
-        flex-wrap: wrap;
+        flex-direction: column;
     }
 
-    .bloc-3 .stat {
-        flex: 1 1 45%;
-    }
-
-    .banner {
-        display: none;
+    .bloc-3 .stat, #ranking {
+        flex: 1 1 100%;
     }
 
     .casilla {
         width: 30px;
         height: 30px;
     }
-}
-
-.casilla.disparada {
-    pointer-events: none;  /* Desactiva completamente el click */
-    opacity: 0.9;
-}
-#mensajeVictoria {
-    position: absolute;
-    top: 20px;
-    left: 50%;
-    transform: translateX(-50%);
-    background: #e94560;
-    color: white;
-    padding: 15px 25px;
-    border-radius: 10px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.4);
-    font-size: 1.2rem;
-    font-weight: bold;
-    z-index: 100;
-    text-align: center;
 }

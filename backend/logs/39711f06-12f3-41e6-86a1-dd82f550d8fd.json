@@ -1,0 +1,309 @@
+{
+  "id_partida": "39711f06-12f3-41e6-86a1-dd82f550d8fd",
+  "jugador": "nigger4",
+  "filas": 10,
+  "columnas": 10,
+  "movimientos": [
+    {
+      "fila": 4,
+      "columna": 7,
+      "resultado": "agua",
+      "hora": "2025-10-30T15:54:24.396485"
+    },
+    {
+      "fila": 5,
+      "columna": 4,
+      "resultado": "agua",
+      "hora": "2025-10-30T15:54:26.880036"
+    },
+    {
+      "fila": 8,
+      "columna": 5,
+      "resultado": "agua",
+      "hora": "2025-10-30T15:54:30.059111"
+    },
+    {
+      "fila": 8,
+      "columna": 4,
+      "resultado": "agua",
+      "hora": "2025-10-30T15:54:31.563689"
+    },
+    {
+      "fila": 5,
+      "columna": 2,
+      "resultado": "agua",
+      "hora": "2025-10-30T15:54:32.360976"
+    },
+    {
+      "fila": 1,
+      "columna": 9,
+      "resultado": "agua",
+      "hora": "2025-10-30T15:54:33.759091"
+    },
+    {
+      "fila": 2,
+      "columna": 7,
+      "resultado": "tocado",
+      "hora": "2025-10-30T15:54:36.058884"
+    },
+    {
+      "fila": 2,
+      "columna": 6,
+      "resultado": "tocado",
+      "hora": "2025-10-30T15:54:37.244778"
+    },
+    {
+      "fila": 2,
+      "columna": 5,
+      "resultado": "tocado",
+      "hora": "2025-10-30T15:54:38.104558"
+    },
+    {
+      "fila": 2,
+      "columna": 4,
+      "resultado": "agua",
+      "hora": "2025-10-30T15:54:38.800419"
+    },
+    {
+      "fila": 2,
+      "columna": 8,
+      "resultado": "tocado",
+      "hora": "2025-10-30T15:54:39.919227"
+    },
+    {
+      "fila": 2,
+      "columna": 9,
+      "resultado": "hundido",
+      "hora": "2025-10-30T15:54:40.838813"
+    },
+    {
+      "fila": 4,
+      "columna": 1,
+      "resultado": "tocado",
+      "hora": "2025-10-30T15:55:34.188242"
+    },
+    {
+      "fila": 4,
+      "columna": 0,
+      "resultado": "agua",
+      "hora": "2025-10-30T15:55:36.031971"
+    },
+    {
+      "fila": 4,
+      "columna": 2,
+      "resultado": "agua",
+      "hora": "2025-10-30T15:55:36.822168"
+    },
+    {
+      "fila": 3,
+      "columna": 1,
+      "resultado": "tocado",
+      "hora": "2025-10-30T15:55:37.901497"
+    },
+    {
+      "fila": 5,
+      "columna": 1,
+      "resultado": "agua",
+      "hora": "2025-10-30T15:55:38.593630"
+    },
+    {
+      "fila": 2,
+      "columna": 1,
+      "resultado": "tocado",
+      "hora": "2025-10-30T15:55:39.709004"
+    },
+    {
+      "fila": 1,
+      "columna": 1,
+      "resultado": "tocado",
+      "hora": "2025-10-30T15:55:40.660463"
+    },
+    {
+      "fila": 0,
+      "columna": 1,
+      "resultado": "hundido",
+      "hora": "2025-10-30T15:55:41.540660"
+    },
+    {
+      "fila": 9,
+      "columna": 2,
+      "resultado": "agua",
+      "hora": "2025-10-30T15:55:44.677391"
+    },
+    {
+      "fila": 9,
+      "columna": 4,
+      "resultado": "agua",
+      "hora": "2025-10-30T15:55:45.539914"
+    },
+    {
+      "fila": 9,
+      "columna": 9,
+      "resultado": "hundido",
+      "hora": "2025-10-30T15:55:46.620272"
+    },
+    {
+      "fila": 9,
+      "columna": 8,
+      "resultado": "agua",
+      "hora": "2025-10-30T15:55:47.810716"
+    },
+    {
+      "fila": 7,
+      "columna": 5,
+      "resultado": "tocado",
+      "hora": "2025-10-30T15:55:50.894993"
+    },
+    {
+      "fila": 7,
+      "columna": 4,
+      "resultado": "tocado",
+      "hora": "2025-10-30T15:55:51.783741"
+    },
+    {
+      "fila": 7,
+      "columna": 3,
+      "resultado": "tocado",
+      "hora": "2025-10-30T15:55:52.811002"
+    },
+    {
+      "fila": 7,
+      "columna": 1,
+      "resultado": "agua",
+      "hora": "2025-10-30T15:55:53.573439"
+    },
+    {
+      "fila": 7,
+      "columna": 2,
+      "resultado": "tocado",
+      "hora": "2025-10-30T15:55:54.176114"
+    },
+    {
+      "fila": 7,
+      "columna": 6,
+      "resultado": "hundido",
+      "hora": "2025-10-30T15:55:55.094600"
+    },
+    {
+      "fila": 5,
+      "columna": 9,
+      "resultado": "agua",
+      "hora": "2025-10-30T15:55:58.746175"
+    },
+    {
+      "fila": 8,
+      "columna": 0,
+      "resultado": "agua",
+      "hora": "2025-10-30T15:56:01.565181"
+    },
+    {
+      "fila": 0,
+      "columna": 4,
+      "resultado": "agua",
+      "hora": "2025-10-30T15:56:03.129405"
+    },
+    {
+      "fila": 5,
+      "columna": 6,
+      "resultado": "tocado",
+      "hora": "2025-10-30T15:56:04.683560"
+    },
+    {
+      "fila": 5,
+      "columna": 5,
+      "resultado": "hundido",
+      "hora": "2025-10-30T15:56:06.357843"
+    },
+    {
+      "fila": 8,
+      "columna": 9,
+      "resultado": "agua",
+      "hora": "2025-10-30T15:56:11.418507"
+    },
+    {
+      "fila": 6,
+      "columna": 8,
+      "resultado": "tocado",
+      "hora": "2025-10-30T15:56:19.767641"
+    },
+    {
+      "fila": 6,
+      "columna": 9,
+      "resultado": "tocado",
+      "hora": "2025-10-30T15:56:21.015344"
+    },
+    {
+      "fila": 6,
+      "columna": 7,
+      "resultado": "tocado",
+      "hora": "2025-10-30T15:56:22.082022"
+    },
+    {
+      "fila": 6,
+      "columna": 6,
+      "resultado": "hundido",
+      "hora": "2025-10-30T15:56:22.889732"
+    },
+    {
+      "fila": 4,
+      "columna": 4,
+      "resultado": "agua",
+      "hora": "2025-10-30T15:56:26.620400"
+    },
+    {
+      "fila": 2,
+      "columna": 3,
+      "resultado": "agua",
+      "hora": "2025-10-30T15:56:27.368171"
+    },
+    {
+      "fila": 6,
+      "columna": 3,
+      "resultado": "agua",
+      "hora": "2025-10-30T15:56:28.397175"
+    },
+    {
+      "fila": 8,
+      "columna": 7,
+      "resultado": "tocado",
+      "hora": "2025-10-30T15:56:29.345276"
+    },
+    {
+      "fila": 8,
+      "columna": 6,
+      "resultado": "agua",
+      "hora": "2025-10-30T15:56:30.816394"
+    },
+    {
+      "fila": 8,
+      "columna": 8,
+      "resultado": "hundido",
+      "hora": "2025-10-30T15:56:32.225112"
+    },
+    {
+      "fila": 9,
+      "columna": 3,
+      "resultado": "agua",
+      "hora": "2025-10-30T15:56:39.369146"
+    },
+    {
+      "fila": 9,
+      "columna": 0,
+      "resultado": "agua",
+      "hora": "2025-10-30T15:56:40.234447"
+    },
+    {
+      "fila": 6,
+      "columna": 0,
+      "resultado": "agua",
+      "hora": "2025-10-30T15:56:41.879653"
+    },
+    {
+      "fila": 1,
+      "columna": 4,
+      "resultado": "agua",
+      "hora": "2025-10-30T15:56:42.945897"
+    }
+  ],
+  "fecha_inicio": "2025-10-30T15:54:22.805055"
+}
