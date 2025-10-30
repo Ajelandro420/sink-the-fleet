@@ -1,8 +1,9 @@
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-from pydantic import BaseModel, conint
-import math
-import random
+from pydantic import BaseModel, Field
+from typing_extensions import Annotated
+import math, random, os, json, uuid
+from datetime import datetime
 
 app = FastAPI()
 
@@ -18,8 +19,8 @@ LOG_DIR = "logs"
 os.makedirs(LOG_DIR, exist_ok=True)
 
 class Partida(BaseModel):
-    filas: conint(ge=7, le=20)
-    columnas: conint(ge=7, le=20)
+    filas: Annotated[int, Field(ge=7, le=20)]
+    columnas: Annotated[int, Field(ge=7, le=20)]
     jugador: str = "Anònim"
 
 class Tablero:
