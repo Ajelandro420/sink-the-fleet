@@ -12,6 +12,7 @@ document.addEventListener('DOMContentLoaded', () => {
     tableroDiv = document.getElementById('tablero');
     mensajeVictoria = document.getElementById('mensajeVictoria');
 
+    // EZ DJ
     sonidos = {
         tocado: document.getElementById('hit'),
         hundido: document.getElementById('sunken'),
@@ -19,11 +20,11 @@ document.addEventListener('DOMContentLoaded', () => {
         ganar: document.getElementById('win'),
         perder: document.getElementById('lose')
     };
-});
+}); 
 
 function reproducirSonido(tipo) {
     if (sonidos[tipo]) {
-        sonidos[tipo].currentTime = 0;
+        sonidos[tipo].currentTime = 0; // Reinicia el sonido
         sonidos[tipo].play().catch(e => console.log('Error reproduciendo sonido:', e));
     }
 }
@@ -33,6 +34,7 @@ document.getElementById('btnComencar').addEventListener('click', async () => {
     const columnas = parseInt(document.getElementById('columnes').value);
     totalCasillas = filas * columnas;
     dificultad = document.querySelector('input[name="dificultat"]:checked').value;
+
 
     jugador = document.getElementById('jugador').value || "Anònim";
 
@@ -45,9 +47,7 @@ document.getElementById('btnComencar').addEventListener('click', async () => {
         mostrarBlocs(filas,columnas);
     } catch(e){console.error(e);}
 });
-
 document.getElementById('btnAbandonar').addEventListener('click', reiniciarJuego);
-
 function reiniciarJuego() {
     bloc2.style.display = "none";
     bloc3.style.display = "none";
@@ -65,7 +65,6 @@ function reiniciarJuego() {
     mensajeVictoria.style.display = "none";
 }
 
-// Mostrar/ocultar bloques
 function mostrarBlocs(filas,columnas){
     bloc1.style.display="none";
     bloc2.style.display="flex";
@@ -73,7 +72,6 @@ function mostrarBlocs(filas,columnas){
     generarTablero(filas,columnas);
 }
 
-// Generar tablero
 function generarTablero(filas,columnas){
     tableroDiv.style.gridTemplateColumns = `repeat(${columnas},40px)`;
     tableroDiv.style.gridTemplateRows = `repeat(${filas},40px)`;
@@ -90,50 +88,31 @@ function generarTablero(filas,columnas){
     }
 }
 
-// Guardar puntuación en localStorage
-function guardarPuntuacion(nombre, puntos) {
-    const ranking = JSON.parse(localStorage.getItem("ranking")) || [];
-    ranking.push({nombre, puntuacion: puntos});
-    localStorage.setItem("ranking", JSON.stringify(ranking));
+function perder() {
+    reproducirSonido('perder');
+    mensajeVictoria.textContent=`¡Lo siento, ${jugador}! Has alcanzado el límite de disparos.`;
+    mensajeVictoria.style.display='block';
+    setTimeout(()=>mensajeVictoria.style.display='none',3000);
+    document.querySelectorAll('.casilla').forEach(c=>c.classList.add('disparada'));
+}
+function ganar() {
+    reproducirSonido('ganar');
+    mensajeVictoria.textContent=`¡Felicidades, ${jugador}! Has hundido todos los barcos.`;
+    mensajeVictoria.style.display='block';
+    setTimeout(()=>mensajeVictoria.style.display='none',3000);
+    document.querySelectorAll('.casilla').forEach(c=>c.classList.add('disparada'));
+}
+async function mostrarRanking() {
+    try {
+        const res = await fetch(`${API_URL}/ranking`);
+        const ranking = await res.json();
+        const lista = document.getElementById("ranking");
+        lista.innerHTML = ranking
+            .map((r, i) => `<li>${i + 1}. ${r.jugador} - ${r.puntuacion} pts</li>`)
+            .join("");
+    } catch(e){ console.error("Error al obtener ranking", e); }
 }
 
-// Mostrar ranking
-function mostrarRanking() {
-    const ranking = JSON.parse(localStorage.getItem("ranking")) || [];
-    ranking.sort((a, b) => b.puntuacion - a.puntuacion);
-
-    const rankingHTML = ranking
-        .slice(0, 5)
-        .map((r, i) => `<li>${i + 1}. ${r.nombre} - ${r.puntuacion} pts</li>`)
-        .join("");
-
-    document.getElementById("ranking").innerHTML = `
-        <h3>🏆 Ranking de Jugadores</h3>
-        <ul>${rankingHTML}</ul>
-    `;
-}
-
-// Fin de partida (ganar o perder)
-function finPartida(victoria) {
-    document.querySelectorAll('.casilla').forEach(c => c.classList.add('disparada'));
-
-    if (victoria) {
-        reproducirSonido('ganar');
-        mensajeVictoria.textContent = `¡Felicidades, ${jugador}! Has hundido todos los barcos.`;
-    } else {
-        reproducirSonido('perder');
-        mensajeVictoria.textContent = `¡Lo siento, ${jugador}! Has alcanzado el límite de disparos.`;
-    }
-
-    mensajeVictoria.style.display = 'block';
-    setTimeout(() => mensajeVictoria.style.display = 'none', 3000);
-
-    const puntos = parseInt(document.getElementById('puntuacio').textContent);
-    guardarPuntuacion(jugador, puntos);
-    mostrarRanking();
-}
-
-// Disparo de casilla
 async function dispararCasilla(fila,columna,casilla){
     if(casilla.classList.contains('disparada') || casilla.classList.contains('hundido')) return;
 
@@ -145,10 +124,10 @@ async function dispararCasilla(fila,columna,casilla){
         casilla.style.cursor='not-allowed';
 
         if(data.resultado==='tocado') {
-            casilla.classList.add('tocado');
+            casilla.classList.add('tocado'); 
             casilla.textContent='💥';
             reproducirSonido('tocado');
-        }
+        }   
         else if(data.resultado==='hundido') {
             casilla.classList.add('hundido');
             casilla.textContent='☠️';
@@ -160,30 +139,57 @@ async function dispararCasilla(fila,columna,casilla){
             reproducirSonido('agua');
         }
 
-        // Actualizar stats
+        // Stats
         document.getElementById('dispars').textContent=data.dispars;
         document.getElementById('encerts').textContent=data.encerts;
         document.getElementById('enfonsats').textContent=data.vaixells_hundidos;
         document.getElementById('puntuacio').textContent=data.puntuacio;
 
-        // Revisar si gana
-        if(data.encerts === data.casillas_ocupadas){
-            finPartida(true);
-            return;
+        //  SISTEMA DE RANKING
+        async function cargarRanking() {
+            try {
+                const res = await fetch(`${API_URL}/ranking`);
+                const data = await res.json();
+
+                const rankingList = document.getElementById("ranking");
+                rankingList.innerHTML = "";
+
+                data.slice(0, 5).forEach((item, i) => {
+                    const li = document.createElement("li");
+                    li.textContent = `${i + 1}. ${item.jugador} — ${item.puntuacion} pts`;
+                    rankingList.appendChild(li);
+                });
+            } catch (e) {
+                console.error("Error cargando ranking:", e);
+            }
         }
 
-        // Revisar si pierde
+// Cargar ranking automáticamente al entrar al juego
+        document.addEventListener("DOMContentLoaded", cargarRanking);
+
+        // Ganar
+        if(data.encerts === data.casillas_ocupadas){
+            ganar();
+        }
+        // Perder
         switch (dificultad) {
             case '1':
-                if (Number(data.dispars) >= totalCasillas*0.7) finPartida(false);
+                if (Number(data.dispars)>= totalCasillas*0.7){
+                    perder();
+                }
                 break;
-            case '2':
-                if (Number(data.dispars) >= totalCasillas*0.5) finPartida(false);
-                break;
-            case '3':
-                if (Number(data.dispars) >= totalCasillas*0.32) finPartida(false);
-                break;
-        }
 
-    } catch(e){console.error(e);}
+            case '2':
+                if (Number(data.dispars)>= totalCasillas*0.5){
+                    perder();
+                }
+                break;
+
+            case '3':
+                if (Number(data.dispars)>= totalCasillas*0.32){
+                    perder();
+                }
+                break;
+            }
+    } catch(e){console.error(e);} 
 }
