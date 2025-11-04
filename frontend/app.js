@@ -1,5 +1,5 @@
 const API_URL = "http://localhost:8000";
-let jugador = "Anònim";
+let jugador = "Anonimo";
 let totalCasillas = 0;
 let dificultad = 0;
 
@@ -123,7 +123,11 @@ async function dispararCasilla(fila,columna,casilla){
         casilla.classList.add('disparada');
         casilla.style.cursor='not-allowed';
 
-        if(data.resultado==='tocado') {
+        if(data.resultado==='repetido'){
+            alert('¡Ya has disparado a esta casilla! Elige otra.');
+            return;
+        }
+        else if(data.resultado==='tocado') {
             casilla.classList.add('tocado'); 
             casilla.textContent='💥';
             reproducirSonido('tocado');
@@ -174,19 +178,19 @@ async function dispararCasilla(fila,columna,casilla){
         // Perder
         switch (dificultad) {
             case '1':
-                if (Number(data.dispars)>= totalCasillas*0.7){
+                if (Number(data.dispars)>= totalCasillas*0.80){
                     perder();
                 }
                 break;
 
             case '2':
-                if (Number(data.dispars)>= totalCasillas*0.5){
+                if (Number(data.dispars)>= totalCasillas*0.65){
                     perder();
                 }
                 break;
 
             case '3':
-                if (Number(data.dispars)>= totalCasillas*0.32){
+                if (Number(data.dispars)>= totalCasillas*0.50){
                     perder();
                 }
                 break;

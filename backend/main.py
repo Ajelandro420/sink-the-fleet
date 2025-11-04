@@ -31,6 +31,7 @@ class Tablero:
         self.barcos = []
         self.casillas_objetivo = math.floor(0.3*(filas * columnas))
         self.casillas_ocupadas = 0
+        self.disparadas = set()
 
     def colocar_barco_aleatorio(self, tamaño):
         while True:
@@ -47,7 +48,7 @@ class Tablero:
             if posiciones and all(self.grid[r][c]==0 for r,c in posiciones):
                 for r,c in posiciones:
                     self.grid[r][c] = tamaño
-                self.barcos.append({'posiciones': posiciones, 'hundido': False})
+                self.barcos.append({'posiciones': posiciones.copy(), 'hundido': False})
                 break
 
     def generar_barcos_basicos(self):
@@ -62,6 +63,8 @@ class Tablero:
 
 
     def disparar(self, fila, col):
+        if (fila, col) in self.disparadas:
+            return 'repetido'
         if self.grid[fila][col] > 0:
             for barco in self.barcos:
                 if (fila, col) in barco['posiciones']:
@@ -77,8 +80,6 @@ estadisticas = {'dispars':0, 'encerts':0, 'vaixells_hundidos':0, 'puntuacio':0}
 
 # --- Funciones de log ---
 def crear_log(jugador, filas, columnas):
-    global partida_id
-    partida_id = str(uuid.uuid4())
     log_data = {
         "id_partida": partida_id,
         "jugador": jugador,
@@ -130,7 +131,8 @@ async def prova():
 
 @app.post("/crearPartida")
 async def crear_partida(partida: Partida):
-    global tablero, estadisticas
+    global tablero, estadisticas, partida_id
+    partida_id = str(uuid.uuid4())
     tablero = Tablero(partida.filas, partida.columnas)
     tablero.generar_barcos_basicos()
     estadisticas = {
@@ -168,8 +170,8 @@ async def disparar(fila: int, columna: int):
         finalizar_log(True, estadisticas['puntuacio'])
 
     return {**estadisticas, "resultado": resultado, "victoria": victoria}
-@app.get("/ranking")
-async def ranking():
+@app.get("/top10")
+async def top10():
     """Devuelve el top 10 de jugadores con mayor puntuación."""
     resultados = []
     for f in os.listdir(LOG_DIR):
