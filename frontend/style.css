@@ -115,6 +115,11 @@ body {
     background: #8b0000;
 }
 
+.casilla.disparada {
+    pointer-events: none;
+    opacity: 0.9;
+}
+
 /* BLOC 3 - Estadístiques */
 .bloc-3 {
     flex: 0 0 300px;
@@ -139,6 +144,50 @@ body {
     font-weight: bold;
     color: #e94560;
     font-size: 1.1rem;
+}
+
+/* BLOC RANKING */
+.bloc-ranking {
+    flex: 0 0 300px;
+    display: flex;
+    flex-direction: column;
+}
+
+.ranking-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    overflow-y: auto;
+    max-height: 400px;
+}
+
+.ranking-list li {
+    padding: 12px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 6px;
+    font-size: 0.95rem;
+    color: #e0e0e0;
+    border-left: 3px solid #e94560;
+    transition: all 0.2s;
+}
+
+.ranking-list li:hover {
+    background: rgba(255, 255, 255, 0.15);
+    transform: translateX(5px);
+}
+
+.ranking-list li:first-child {
+    border-left-color: #ffd700;
+    font-weight: bold;
+}
+
+.ranking-list li:nth-child(2) {
+    border-left-color: #c0c0c0;
+}
+
+.ranking-list li:nth-child(3) {
+    border-left-color: #cd7f32;
 }
 
 /* BOTONS */
@@ -183,6 +232,22 @@ body {
     border: 1px solid rgba(233, 69, 96, 0.3);
 }
 
+#mensajeVictoria {
+    position: absolute;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #e94560;
+    color: white;
+    padding: 15px 25px;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+    font-size: 1.2rem;
+    font-weight: bold;
+    z-index: 100;
+    text-align: center;
+}
+
 /* RESPONSIVE - TABLET */
 @media (max-width: 1024px) {
     .contenedor-principal {
@@ -193,7 +258,7 @@ body {
         flex: 1 0 auto;
     }
 
-    .bloc-3 {
+    .bloc-3, .bloc-ranking {
         flex: 1 0 auto;
         flex-direction: row;
         flex-wrap: wrap;
@@ -227,7 +292,7 @@ body {
         flex: 0 0 120px;
     }
 
-    .bloc-3 {
+    .bloc-3, .bloc-ranking {
         flex-direction: row;
         flex-wrap: wrap;
     }
@@ -244,24 +309,8 @@ body {
         width: 30px;
         height: 30px;
     }
-}
 
-.casilla.disparada {
-    pointer-events: none;  /* Desactiva completamente el click */
-    opacity: 0.9;
-}
-#mensajeVictoria {
-    position: absolute;
-    top: 20px;
-    left: 50%;
-    transform: translateX(-50%);
-    background: #e94560;
-    color: white;
-    padding: 15px 25px;
-    border-radius: 10px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.4);
-    font-size: 1.2rem;
-    font-weight: bold;
-    z-index: 100;
-    text-align: center;
+    .ranking-list {
+        max-height: 300px;
+    }
 }
