@@ -314,3 +314,15 @@ body {
         max-height: 300px;
     }
 }
+/* Fondo GIF solo en la pantalla de inicio */
+body.inicio {
+    background: url("https://i.pinimg.com/originals/0c/f2/36/0cf236d8c22a82b61b3a469be64881e4.gif") no-repeat center center fixed;
+    background-size: cover;
+}
+
+/* Centrar el bloque de configuración */
+body.inicio .contenedor-principal {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

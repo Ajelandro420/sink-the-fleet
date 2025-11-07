@@ -1,0 +1,63 @@
+{
+  "id_partida": "ed89ffbb-7468-43d8-b741-245648fd5c3d",
+  "jugador": "niigerpppp",
+  "filas": 10,
+  "columnas": 10,
+  "movimientos": [
+    {
+      "fila": 5,
+      "columna": 5,
+      "resultado": "agua",
+      "hora": "2025-11-07T15:28:38.204808"
+    },
+    {
+      "fila": 6,
+      "columna": 9,
+      "resultado": "agua",
+      "hora": "2025-11-07T15:28:38.452796"
+    },
+    {
+      "fila": 6,
+      "columna": 8,
+      "resultado": "tocado",
+      "hora": "2025-11-07T15:28:38.643842"
+    },
+    {
+      "fila": 4,
+      "columna": 8,
+      "resultado": "tocado",
+      "hora": "2025-11-07T15:28:39.264794"
+    },
+    {
+      "fila": 2,
+      "columna": 7,
+      "resultado": "agua",
+      "hora": "2025-11-07T15:28:39.589239"
+    },
+    {
+      "fila": 1,
+      "columna": 7,
+      "resultado": "agua",
+      "hora": "2025-11-07T15:28:39.770906"
+    },
+    {
+      "fila": 5,
+      "columna": 6,
+      "resultado": "agua",
+      "hora": "2025-11-07T15:28:40.032464"
+    },
+    {
+      "fila": 4,
+      "columna": 5,
+      "resultado": "agua",
+      "hora": "2025-11-07T15:28:40.492280"
+    },
+    {
+      "fila": 8,
+      "columna": 9,
+      "resultado": "agua",
+      "hora": "2025-11-07T15:28:40.958979"
+    }
+  ],
+  "fecha_inicio": "2025-11-07T15:28:37.720438"
+}
