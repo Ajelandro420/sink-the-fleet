@@ -22,13 +22,11 @@ body {
     flex-wrap: wrap;
     width: 100%;
     max-width: 100%;
-    justify-content: center;
-    align-items: center;
 }
 
 /* BLOQUES */
 .bloc {
-    background: rgba(15, 52, 96, 0.35); /* Más transparente: de 0.75 a 0.35 */
+    background: rgba(15, 52, 96, 0.75);
     border-radius: 12px;
     padding: 20px;
     backdrop-filter: blur(15px);
@@ -44,18 +42,12 @@ body {
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
 }
 
-/* BLOC 1 - Configuració - CENTRADO CUANDO ESTÁ SOLO */
+/* BLOC 1 - Configuració */
 .bloc-1 {
     flex: 0 0 350px;
     display: flex;
     flex-direction: column;
     gap: 15px;
-}
-
-/* Cuando bloc-1 es el único visible, centrarlo */
-.contenedor-principal:has(.bloc-1:only-child) {
-    justify-content: center;
-    align-items: center;
 }
 
 .form-group {
@@ -86,7 +78,7 @@ body {
     outline: 2px solid #e94560;
 }
 
-/* BLOC 2 - Taulell - EXTENDIDO Y COMPACTO */
+/* BLOC 2 - Taulell */
 .bloc-2 {
     flex: 1;
     min-width: 450px;
@@ -94,7 +86,6 @@ body {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: 20px;
 }
 
 .tablero {
@@ -103,14 +94,11 @@ body {
     background: rgba(0, 0, 0, 0.3);
     padding: 10px;
     border-radius: 8px;
-    width: 100%;
-    height: 100%;
-    max-height: calc(100vh - 70px);
 }
 
 .casilla {
-    width: 100%;
-    height: 100%;
+    width: 40px;
+    height: 40px;
     background: #2a5298;
     border: 1px solid #1e3a5f;
     cursor: pointer;
@@ -118,7 +106,7 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: clamp(0.8rem, 2vw, 1.2rem);
+    font-size: 1.2rem;
 }
 
 .casilla:hover {
@@ -342,9 +330,8 @@ body {
     }
 
     .casilla {
-        min-width: 25px;
-        min-height: 25px;
-        font-size: 1rem;
+        width: 30px;
+        height: 30px;
     }
 
     .ranking-list {
