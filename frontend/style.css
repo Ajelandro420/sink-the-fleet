@@ -147,11 +147,12 @@ body {
 
 /* BLOC 3 - Estadístiques */
 .bloc-3 {
-    flex: 0 0 350px;
+    flex: 0 1 auto;
     display: flex;
     flex-direction: column;
     gap: 15px;
 }
+
 
 .stat {
     display: flex;
@@ -350,4 +351,25 @@ body {
     .ranking-list {
         max-height: 300px;
     }
+}
+
+
+#registroMovimientos {
+    margin-top: 10px;
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 6px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    padding: 10px;
+    max-height: 120px; /* solo el registro tiene scroll */
+    overflow-y: auto;
+}
+
+#listaMovimientos {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    font-size: 0.9rem;
+    color: #e94560;
+    font-weight: bold;
 }

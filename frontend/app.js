@@ -29,6 +29,17 @@ function reproducirSonido(tipo) {
     }
 }
 
+function registrarMovimiento(texto) {
+    const lista = document.getElementById("listaMovimientos");
+    const li = document.createElement("li");
+    li.textContent = texto;
+    lista.prepend(li);
+}
+
+
+
+
+
 async function cargarRanking() {
     try {
         const res = await fetch(`${API_URL}/ranking`);
@@ -150,16 +161,20 @@ async function dispararCasilla(fila,columna,casilla){
             casilla.classList.add('tocado');
             casilla.textContent='💥';
             reproducirSonido('tocado');
+            registrarMovimiento(`💥 Tocado en (${fila+1}, ${columna+1})`);
+
         }
         else if(data.resultado==='hundido') {
             casilla.classList.add('hundido');
             casilla.textContent='☠️';
             reproducirSonido('hundido');
+            registrarMovimiento(`☠️ Hundido en (${fila+1}, ${columna+1})`);
         }
         else {
             casilla.classList.add('agua');
             casilla.textContent='💧';
             reproducirSonido('agua');
+            registrarMovimiento(`💧 Agua en (${fila+1}, ${columna+1})`);
         }
 
         document.getElementById('dispars').textContent=data.dispars;

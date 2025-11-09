@@ -1,0 +1,51 @@
+{
+  "id_partida": "958c72f3-a616-44af-b03d-23934da940d5",
+  "jugador": "An\u00f2nim",
+  "filas": 10,
+  "columnas": 10,
+  "movimientos": [
+    {
+      "fila": 3,
+      "columna": 6,
+      "resultado": "agua",
+      "hora": "2025-11-09T23:04:42.685200"
+    },
+    {
+      "fila": 4,
+      "columna": 5,
+      "resultado": "agua",
+      "hora": "2025-11-09T23:04:42.980903"
+    },
+    {
+      "fila": 3,
+      "columna": 4,
+      "resultado": "agua",
+      "hora": "2025-11-09T23:04:43.231662"
+    },
+    {
+      "fila": 5,
+      "columna": 3,
+      "resultado": "agua",
+      "hora": "2025-11-09T23:04:43.560018"
+    },
+    {
+      "fila": 5,
+      "columna": 4,
+      "resultado": "agua",
+      "hora": "2025-11-09T23:04:44.004415"
+    },
+    {
+      "fila": 3,
+      "columna": 2,
+      "resultado": "hundido",
+      "hora": "2025-11-09T23:04:44.289452"
+    },
+    {
+      "fila": 2,
+      "columna": 2,
+      "resultado": "agua",
+      "hora": "2025-11-09T23:04:44.552564"
+    }
+  ],
+  "fecha_inicio": "2025-11-09T23:04:42.117852"
+}

@@ -1,0 +1,93 @@
+{
+  "id_partida": "b23addfc-0770-4473-9169-0397a5d35802",
+  "jugador": "An\u00f2nim",
+  "filas": 10,
+  "columnas": 10,
+  "movimientos": [
+    {
+      "fila": 4,
+      "columna": 8,
+      "resultado": "agua",
+      "hora": "2025-11-09T23:07:21.423990"
+    },
+    {
+      "fila": 4,
+      "columna": 5,
+      "resultado": "agua",
+      "hora": "2025-11-09T23:07:21.652393"
+    },
+    {
+      "fila": 2,
+      "columna": 4,
+      "resultado": "agua",
+      "hora": "2025-11-09T23:07:21.880300"
+    },
+    {
+      "fila": 3,
+      "columna": 3,
+      "resultado": "agua",
+      "hora": "2025-11-09T23:07:22.268784"
+    },
+    {
+      "fila": 4,
+      "columna": 3,
+      "resultado": "tocado",
+      "hora": "2025-11-09T23:07:22.633899"
+    },
+    {
+      "fila": 5,
+      "columna": 5,
+      "resultado": "tocado",
+      "hora": "2025-11-09T23:07:23.181451"
+    },
+    {
+      "fila": 5,
+      "columna": 3,
+      "resultado": "agua",
+      "hora": "2025-11-09T23:07:24.013321"
+    },
+    {
+      "fila": 2,
+      "columna": 6,
+      "resultado": "tocado",
+      "hora": "2025-11-09T23:07:26.202441"
+    },
+    {
+      "fila": 4,
+      "columna": 6,
+      "resultado": "agua",
+      "hora": "2025-11-09T23:07:26.725744"
+    },
+    {
+      "fila": 5,
+      "columna": 6,
+      "resultado": "tocado",
+      "hora": "2025-11-09T23:07:28.588463"
+    },
+    {
+      "fila": 5,
+      "columna": 8,
+      "resultado": "tocado",
+      "hora": "2025-11-09T23:07:28.997671"
+    },
+    {
+      "fila": 7,
+      "columna": 8,
+      "resultado": "tocado",
+      "hora": "2025-11-09T23:07:29.624669"
+    },
+    {
+      "fila": 6,
+      "columna": 6,
+      "resultado": "agua",
+      "hora": "2025-11-09T23:07:30.227014"
+    },
+    {
+      "fila": 7,
+      "columna": 6,
+      "resultado": "tocado",
+      "hora": "2025-11-09T23:07:30.724807"
+    }
+  ],
+  "fecha_inicio": "2025-11-09T23:07:20.862246"
+}
