@@ -1,4 +1,5 @@
 from fastapi import FastAPI, HTTPException
+from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
 from typing_extensions import Annotated
@@ -6,6 +7,10 @@ import math, random, os, json, uuid
 from datetime import datetime
 
 app = FastAPI()
+
+frontend_path = os.path.join(os.path.dirname(__file__), "..", "frontend")
+
+app.mount("/static", StaticFiles(directory=frontend_path), name="static")
 
 app.add_middleware(
     CORSMiddleware,
@@ -124,6 +129,10 @@ def finalizar_log(victoria, puntuacion):
     }
     with open(path, "w") as f:
         json.dump(log_data, f, indent=2)
+
+@app.get("/")
+def root():
+    return FileResponse(os.path.join(frontend_path, "index.html"))
 
 @app.get("/prova")
 async def prova():
