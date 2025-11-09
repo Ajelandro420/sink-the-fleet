@@ -1,0 +1,33 @@
+{
+  "id_partida": "8f63149a-54ef-4535-a99b-922e48236974",
+  "jugador": "An\u00f2nim",
+  "filas": 10,
+  "columnas": 10,
+  "movimientos": [
+    {
+      "fila": 5,
+      "columna": 7,
+      "resultado": "agua",
+      "hora": "2025-11-09T21:19:24.202377"
+    },
+    {
+      "fila": 6,
+      "columna": 9,
+      "resultado": "tocado",
+      "hora": "2025-11-09T21:19:24.885686"
+    },
+    {
+      "fila": 3,
+      "columna": 2,
+      "resultado": "agua",
+      "hora": "2025-11-09T21:19:31.011821"
+    },
+    {
+      "fila": 5,
+      "columna": 4,
+      "resultado": "tocado",
+      "hora": "2025-11-09T21:19:31.726351"
+    }
+  ],
+  "fecha_inicio": "2025-11-09T21:19:21.904729"
+}
