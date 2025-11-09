@@ -1,0 +1,33 @@
+{
+  "id_partida": "70f9c430-9fd0-480f-a523-66e34d25e3df",
+  "jugador": "An\u00f2nim",
+  "filas": 10,
+  "columnas": 10,
+  "movimientos": [
+    {
+      "fila": 2,
+      "columna": 4,
+      "resultado": "hundido",
+      "hora": "2025-11-09T21:08:50.892743"
+    },
+    {
+      "fila": 5,
+      "columna": 4,
+      "resultado": "tocado",
+      "hora": "2025-11-09T21:08:51.556479"
+    },
+    {
+      "fila": 4,
+      "columna": 4,
+      "resultado": "tocado",
+      "hora": "2025-11-09T21:08:52.297276"
+    },
+    {
+      "fila": 3,
+      "columna": 4,
+      "resultado": "agua",
+      "hora": "2025-11-09T21:08:52.883597"
+    }
+  ],
+  "fecha_inicio": "2025-11-09T21:08:50.003368"
+}
