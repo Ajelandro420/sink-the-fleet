@@ -20,6 +20,11 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+@app.get("/")
+def root():
+    return FileResponse(os.path.join(frontend_path, "index.html"))
+
 # --- Carpeta de logs ---
 LOG_DIR = "logs"
 os.makedirs(LOG_DIR, exist_ok=True)
@@ -130,10 +135,6 @@ def finalizar_log(victoria, puntuacion):
     }
     with open(path, "w") as f:
         json.dump(log_data, f, indent=2)
-
-@app.get("/")
-def root():
-    return FileResponse(os.path.join(frontend_path, "index.html"))
 
 @app.get("/prova")
 async def prova():
