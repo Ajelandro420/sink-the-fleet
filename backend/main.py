@@ -29,6 +29,61 @@ def root():
 LOG_DIR = "logs"
 os.makedirs(LOG_DIR, exist_ok=True)
 
+# --- Estadísticas globales ---
+
+DATA_DIR = "data"
+STATS_PATH = os.path.join(DATA_DIR, "stats.json")
+
+# Crea la carpeta "data" si no existe
+os.makedirs(DATA_DIR, exist_ok=True)
+
+# Datos por defecto si no hay archivo
+DEFAULT_STATS = {
+    "total_partidas": 0,
+    "mejor_puntuacion": 0,
+    "jugador_top": "",
+    "promedio_disparos": 0.0,
+    "promedio_encerts": 0.0,
+    "top_players": []  # top 5
+}
+
+# Cargar estadísticas o crear
+def load_stats():
+    if not os.path.exists(STATS_PATH):
+        with open(STATS_PATH, "w") as f:
+            json.dump(DEFAULT_STATS, f, indent=2)
+        return DEFAULT_STATS.copy()
+    with open(STATS_PATH, "r") as f:
+        return json.load(f)
+
+# Guardar estadísticas actualizadas
+def save_stats(stats):
+    with open(STATS_PATH, "w") as f:
+        json.dump(stats, f, indent=2)
+
+# Actualizar estadísticas al finalizar partida
+def actualizar_estadisticas_globales(jugador, puntuacion, dispars, encerts):
+    stats = load_stats()
+    stats["total_partidas"] += 1
+
+    # Si hay una mejor puntuación, guardarla
+    if puntuacion > stats["mejor_puntuacion"]:
+        stats["mejor_puntuacion"] = puntuacion
+        stats["jugador_top"] = jugador
+
+    # Calcular promedios
+    n = stats["total_partidas"]
+    stats["promedio_disparos"] = round((stats["promedio_disparos"]*(n-1) + dispars) / n, 2)
+    stats["promedio_encerts"] = round((stats["promedio_encerts"]*(n-1) + encerts) / n, 2)
+
+    # Añadir al top 5
+    top = stats.get("top_players", [])
+    top.append({"jugador": jugador, "puntuacion": puntuacion})
+    top = sorted(top, key=lambda x: x["puntuacion"], reverse=True)[:5]
+    stats["top_players"] = top
+
+    save_stats(stats)
+
 class Partida(BaseModel):
     filas: Annotated[int, Field(ge=7, le=20)]
     columnas: Annotated[int, Field(ge=7, le=20)]
@@ -122,19 +177,32 @@ def log_disparo(fila, columna, resultado):
 
 
 def finalizar_log(victoria, puntuacion):
-    """Guarda el resultado final de la partida en el log."""
+    """Cierra la partida y actualiza las estadísticas globales."""
     if not partida_id:
         return
+
+    # Cargar log actual
     path = os.path.join(LOG_DIR, f"{partida_id}.json")
     with open(path, "r") as f:
         log_data = json.load(f)
+
+    # Añadir datos finales
     log_data["final"] = {
         "victoria": victoria,
         "puntuacion": puntuacion,
         "hora_fin": datetime.now().isoformat()
     }
+
+    # Guardar el log actualizado
     with open(path, "w") as f:
         json.dump(log_data, f, indent=2)
+
+    # Actualizar estadísticas globales
+    jugador = log_data.get("jugador", "Anónimo")
+    dispars = estadisticas.get("dispars", 0)
+    encerts = estadisticas.get("encerts", 0)
+    actualizar_estadisticas_globales(jugador, puntuacion, dispars, encerts)
+
 
 @app.get("/prova")
 async def prova():
@@ -177,10 +245,13 @@ async def disparar(fila: int, columna: int):
     log_disparo(fila, columna, resultado)
 
     victoria = estadisticas['vaixells_hundidos'] == len(tablero.barcos)
-    if victoria:
-        finalizar_log(True, estadisticas['puntuacio'])
+
+    # Llamara a finalizar_log si la partida ha terminado
+    finalizar_log(victoria, estadisticas['puntuacio'])
 
     return {**estadisticas, "resultado": resultado, "victoria": victoria}
+
+
 @app.get("/top10")
 async def top10():
     """Devuelve el top 10 de jugadores con mayor puntuación."""
@@ -211,3 +282,14 @@ async def get_ranking():
                 })
     registros.sort(key=lambda x: x["puntuacion"], reverse=True)
     return registros[:10]
+# Endpoints de estadisticas globales
+@app.get("/estadisticas")
+async def estadisticas_globales():
+    """Devuelve las estadísticas guardadas en data/stats.json"""
+    return load_stats()
+
+@app.get("/top5")
+async def top5():
+    """Devuelve el top 5 de jugadores"""
+    stats = load_stats()
+    return stats.get("top_players", [])
