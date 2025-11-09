@@ -99,8 +99,8 @@ function mostrarBlocs(filas,columnas){
 }
 
 function generarTablero(filas,columnas){
-    tableroDiv.style.gridTemplateColumns = `repeat(${columnas},40px)`;
-    tableroDiv.style.gridTemplateRows = `repeat(${filas},40px)`;
+    tableroDiv.style.gridTemplateColumns = `repeat(${columnas},1fr)`;
+    tableroDiv.style.gridTemplateRows = `repeat(${filas},1fr)`;
     tableroDiv.innerHTML = '';
     for(let i=0;i<filas;i++){
         for(let j=0;j<columnas;j++){

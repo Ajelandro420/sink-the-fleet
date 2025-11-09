@@ -81,24 +81,31 @@ body {
 /* BLOC 2 - Taulell */
 .bloc-2 {
     flex: 1;
-    min-width: 450px;
     display: flex;
-    flex-direction: column;
-    align-items: center;
     justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    padding: 1rem;
+    overflow: hidden;
 }
 
 .tablero {
     display: grid;
+    width: min(90vmin, 100%);
+    height: min(90vmin, 100%);
+    aspect-ratio: 1 / 1;
     gap: 2px;
     background: rgba(0, 0, 0, 0.3);
-    padding: 10px;
     border-radius: 8px;
+    padding: 5px;
+    box-sizing: border-box;
+    overflow: hidden;
 }
 
 .casilla {
-    width: 40px;
-    height: 40px;
+    width: 100%;
+    aspect-ratio: 1 / 1;
     background: #2a5298;
     border: 1px solid #1e3a5f;
     cursor: pointer;
@@ -106,8 +113,14 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 1.2rem;
+    font-size: calc(2.2vmin + 0.4vw);
+    line-height: 1;
+    user-select: none;
 }
+
+
+
+
 
 .casilla:hover {
     background: #3d6cb9;

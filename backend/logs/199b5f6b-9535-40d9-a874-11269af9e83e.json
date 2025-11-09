@@ -1,0 +1,15 @@
+{
+  "id_partida": "199b5f6b-9535-40d9-a874-11269af9e83e",
+  "jugador": "An\u00f2nim",
+  "filas": 10,
+  "columnas": 10,
+  "movimientos": [
+    {
+      "fila": 4,
+      "columna": 9,
+      "resultado": "agua",
+      "hora": "2025-11-09T21:32:45.901929"
+    }
+  ],
+  "fecha_inicio": "2025-11-09T21:32:41.262173"
+}
