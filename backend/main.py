@@ -250,7 +250,7 @@ async def crear_partida(partida: Partida):
 
     crear_log(partida_id, partida.jugador, partida.filas, partida.columnas, tablero)
 
-    print(f"[LOG] Partida creada con ID: {partida_id} ({partida.filas}x{partida.columnas})")
+    print(f"[LOG] Partida creada con ID: {partida_id} ({partida.filas}x{partida.columnas})")  
     return {
         "estat": "Partida creada",
         "filas": partida.filas,
