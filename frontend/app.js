@@ -21,19 +21,17 @@ document.addEventListener('DOMContentLoaded', () => {
         ganar: document.getElementById('win'),
         perder: document.getElementById('lose')
     };
-     // AÑADE AQUÍ EL CÓDIGO DEL MODAL
+
     const btnInfoDificultad = document.getElementById('btnInfoDificultad');
     const modalInfo = document.getElementById('modalInfo');
     const btnCerrarModal = document.getElementById('btnCerrarModal');
 
     if (btnInfoDificultad && modalInfo && btnCerrarModal) {
-        // Abrir modal
         btnInfoDificultad.addEventListener('click', () => {
             modalInfo.style.display = 'flex';
             document.body.style.overflow = 'hidden';
         });
 
-        // Cerrar modal
         function cerrarModal() {
             modalInfo.style.display = 'none';
             document.body.style.overflow = 'auto';
@@ -41,26 +39,27 @@ document.addEventListener('DOMContentLoaded', () => {
 
         btnCerrarModal.addEventListener('click', cerrarModal);
 
-        // Cerrar al hacer click fuera
         modalInfo.addEventListener('click', (e) => {
             if (e.target === modalInfo) {
                 cerrarModal();
             }
         });
 
-        // Cerrar con Escape
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape' && modalInfo.style.display === 'flex') {
                 cerrarModal();
             }
         });
     }
+
+    console.log('DOMContentLoaded ==> Elementos inicializados');
 });
 
 function reproducirSonido(tipo) {
     if (sonidos[tipo]) {
         sonidos[tipo].currentTime = 0;
-        sonidos[tipo].play().catch(e => console.log('Error reproduciendo sonido:', e));
+        sonidos[tipo].play().catch(e => console.log('Error reproduciendo sonido:', e))
+        console.log(`reproducirSonido() ==> Sonido reproducido: ${tipo}`);
     }
 }
 
@@ -69,6 +68,7 @@ function registrarMovimiento(texto) {
     const li = document.createElement("li");
     li.textContent = texto;
     lista.prepend(li);
+    console.log(`registrarMovimiento() ==> Movimiento registrado: ${texto}`);
 }
 
 async function cargarRanking() {
@@ -88,9 +88,12 @@ async function cargarRanking() {
             const li = document.createElement("li");
             li.textContent = `${i + 1}. ${item.jugador} — ${item.puntuacion} pts`;
             rankingList.appendChild(li);
+            console.log(`cargarRanking() ==> Ranking cargado: ${li.textContent}`);
         });
+
+        console.log("cargarRanking() ==> Ranking completo cargado");
     } catch (e) {
-        console.error("Error cargando ranking:", e);
+        console.error("cargarRanking() ==> Error cargando ranking:", e);
         document.getElementById("ranking").innerHTML = "<li>Error al cargar ranking</li>";
     }
 }
@@ -114,6 +117,7 @@ document.getElementById('btnComencar').addEventListener('click', async () => {
 
         mostrarBlocs(filas,columnas);
         cargarRanking();
+        console.log(`dom.btnComenzar(click) ==> Iniciada nueva partida con ID: ${partidaActualId}`);
     } catch(e){console.error(e);}
 });
 
@@ -143,7 +147,7 @@ function reiniciarJuego() {
             body: JSON.stringify({partida_id: partidaActualId})
         });
     } catch (e) {console.error(e);}
-    console.log("Juego reiniciado");
+    console.log("reiniciarJuego() ==> Juego reiniciado");
 }
 
 function mostrarBlocs(filas,columnas){
@@ -152,6 +156,7 @@ function mostrarBlocs(filas,columnas){
     bloc3.style.display="flex";
     blocRanking.style.display="flex";
     generarTablero(filas,columnas);
+    console.log('mostrarBlocs() ==> Bloques mostrados');
 }
 
 function generarTablero(filas,columnas){
@@ -178,9 +183,12 @@ function generarTablero(filas,columnas){
                 }
             });
 
+            console.log(`generarTablero() ==> Casilla creada en fila ${i}, columna ${j}`);
             tableroDiv.appendChild(c);
         }
+        console.log(`generarTablero() ==> Fila ${i} creada`);
     }
+    console.log('generarTablero() ==> Tablero generado');
 }
 
 function perder() {
@@ -189,6 +197,7 @@ function perder() {
     mensajeVictoria.style.display='block';
     setTimeout(()=>mensajeVictoria.style.display='none',3000);
     document.querySelectorAll('.casilla').forEach(c=>c.classList.add('disparada'));
+    console.log('perder() ==> Has perdido la partida');
     cargarRanking();
 }
 
@@ -198,6 +207,7 @@ function ganar() {
     mensajeVictoria.style.display='block';
     setTimeout(()=>mensajeVictoria.style.display='none',3000);
     document.querySelectorAll('.casilla').forEach(c=>c.classList.add('disparada'));
+    console.log('ganar() ==> ¡Has ganado la partida!');
     cargarRanking();
 }
 
@@ -207,6 +217,7 @@ async function dispararCasilla(fila,columna,casilla){
     //Validamos
     if (!partidaActualId) {
         alert('Error: No hay partida activa');
+        console.log('dispararCasilla() ==> Error: No hay partida activa');
         return;
     }
 
@@ -219,6 +230,7 @@ async function dispararCasilla(fila,columna,casilla){
 
         if(data.resultado==='repetido'){
             alert('¡Ya has disparado a esta casilla! Elige otra.');
+            console.log(`dispararCasilla() ==> Disparo repetido en fila ${fila}, columna ${columna}`);
             return;
         }
         else if(data.resultado==='tocado') {
@@ -229,6 +241,7 @@ async function dispararCasilla(fila,columna,casilla){
 
             reproducirSonido('tocado');
             registrarMovimiento(`💥 Tocado en (${fila+1}, ${columna+1})`);
+            console.log(`dispararCasilla() ==> Tocado en fila ${fila}, columna ${columna}`);
 
         }
         else if(data.resultado==='hundido') {
@@ -239,6 +252,7 @@ async function dispararCasilla(fila,columna,casilla){
 
             reproducirSonido('hundido');
             registrarMovimiento(`☠️ Hundido en (${fila+1}, ${columna+1})`);
+            console.log(`dispararCasilla() ==> Hundido en fila ${fila}, columna ${columna}`);
         }
         else {
             casilla.classList.add('agua');
@@ -248,6 +262,7 @@ async function dispararCasilla(fila,columna,casilla){
 
             reproducirSonido('agua');
             registrarMovimiento(`💧 Agua en (${fila+1}, ${columna+1})`);
+            console.log(`dispararCasilla() ==> Agua en fila ${fila}, columna ${columna}`);
         }
 
         document.getElementById('dispars').textContent=data.dispars;
