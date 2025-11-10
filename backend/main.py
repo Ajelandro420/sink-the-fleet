@@ -89,6 +89,21 @@ class Partida(BaseModel):
     columnas: Annotated[int, Field(ge=7, le=20)]
     jugador: str = "Anònim"
 
+partidas_activas = {}
+
+class PartidaActiva:
+    def __init__(self, partida_id, tablero, jugador):
+        self.id = partida_id
+        self.tablero = tablero
+        self.jugador = jugador
+        self.estadisticas = {
+            'dispars': 0,
+            'encerts': 0,
+            'vaixells_hundidos': 0,
+            'puntuacio': 0
+        }
+        self.finalizada = False
+
 class Tablero:
     def __init__(self, filas, columnas):
         self.filas = filas
@@ -131,6 +146,9 @@ class Tablero:
     def disparar(self, fila, col):
         if (fila, col) in self.disparadas:
             return 'repetido'
+        
+        self.disparadas.add((fila, col))
+        
         if self.grid[fila][col] > 0:
             for barco in self.barcos:
                 if (fila, col) in barco['posiciones']:
@@ -141,11 +159,9 @@ class Tablero:
                     return 'tocado'
         return 'agua'
 
-tablero = None
-estadisticas = {'dispars':0, 'encerts':0, 'vaixells_hundidos':0, 'puntuacio':0}
 
 # --- Funciones de log ---
-def crear_log(jugador, filas, columnas):
+def crear_log(partida_id,jugador, filas, columnas):
     log_data = {
         "id_partida": partida_id,
         "jugador": jugador,
@@ -160,7 +176,7 @@ def crear_log(jugador, filas, columnas):
     return partida_id
 
 
-def log_disparo(fila, columna, resultado):
+def log_disparo(partida_id,fila, columna, resultado):
     if not partida_id:
         return
     path = os.path.join(LOG_DIR, f"{partida_id}.json")
@@ -176,33 +192,27 @@ def log_disparo(fila, columna, resultado):
         json.dump(log_data, f, indent=2)
 
 
-def finalizar_log(victoria, puntuacion):
-    """Cierra la partida y actualiza las estadísticas globales."""
+def finalizar_log(partida_id, jugador, victoria, puntuacion, estadisticas):
     if not partida_id:
         return
-
-    # Cargar log actual
+    
     path = os.path.join(LOG_DIR, f"{partida_id}.json")
     with open(path, "r") as f:
         log_data = json.load(f)
-
-    # Añadir datos finales
+    
     log_data["final"] = {
         "victoria": victoria,
         "puntuacion": puntuacion,
         "hora_fin": datetime.now().isoformat()
     }
-
-    # Guardar el log actualizado
+    
     with open(path, "w") as f:
         json.dump(log_data, f, indent=2)
-
-    # Actualizar estadísticas globales
-    jugador = log_data.get("jugador", "Anónimo")
+    
+    # Ahora usa el parámetro estadisticas que recibe
     dispars = estadisticas.get("dispars", 0)
     encerts = estadisticas.get("encerts", 0)
     actualizar_estadisticas_globales(jugador, puntuacion, dispars, encerts)
-
 
 @app.get("/prova")
 async def prova():
@@ -210,17 +220,15 @@ async def prova():
 
 @app.post("/crearPartida")
 async def crear_partida(partida: Partida):
-    global tablero, estadisticas, partida_id
     partida_id = str(uuid.uuid4())
     tablero = Tablero(partida.filas, partida.columnas)
     tablero.generar_barcos_basicos()
-    estadisticas = {
-        'dispars': 0,
-        'encerts': 0,
-        'vaixells_hundidos': 0,
-        'puntuacio': 0
-    }
-    crear_log(partida.jugador, partida.filas, partida.columnas)
+
+    partida_activa = PartidaActiva(partida_id, tablero, partida.jugador)
+    partidas_activas[partida_id] = partida_activa
+
+    crear_log(partida_id, partida.jugador, partida.filas, partida.columnas)
+
     return {
         "estat": "Partida creada",
         "filas": partida.filas,
@@ -228,45 +236,51 @@ async def crear_partida(partida: Partida):
         "jugador": partida.jugador,
         "id_partida": partida_id
     }
+
 @app.post("/disparar")
-async def disparar(fila: int, columna: int):
-    global estadisticas
-    if tablero is None:
-        raise HTTPException(status_code=400, detail="No hay partida activa")
+async def disparar(fila: int, columna: int, partida_id: str):
+    if partida_id not in partidas_activas:
+        raise HTTPException(status_code=404, detail="Partida no encontrada")
 
-    resultado = tablero.disparar(fila, columna)
-    estadisticas['dispars'] += 1
+    partida_activa = partidas_activas[partida_id]
+
+    if partida_activa.finalizada:
+        raise HTTPException(status_code=400, detail="La partida ya ha finalizado")
+
+    resultado = partida_activa.tablero.disparar(fila, columna)
+    partida_activa.estadisticas['dispars'] += 1
+
     if resultado in ['tocado', 'hundido']:
-        estadisticas['encerts'] += 1
+        partida_activa.estadisticas['encerts'] += 1
     if resultado == 'hundido':
-        estadisticas['vaixells_hundidos'] += 1
-    estadisticas['puntuacio'] = estadisticas['encerts'] * 10
+        partida_activa.estadisticas['vaixells_hundidos'] += 1
+    partida_activa.estadisticas['puntuacio'] = partida_activa.estadisticas['encerts'] * 10
 
-    log_disparo(fila, columna, resultado)
+    log_disparo(partida_id, fila, columna, resultado)
 
-    victoria = estadisticas['vaixells_hundidos'] == len(tablero.barcos)
+    victoria = partida_activa.estadisticas['vaixells_hundidos'] == len(partida_activa.tablero.barcos)
 
-    # Llamara a finalizar_log si la partida ha terminado
-    finalizar_log(victoria, estadisticas['puntuacio'])
+    if victoria:
+        partida_activa.finalizada = True
+        finalizar_log(partida_id, partida_activa.jugador, victoria, 
+                    partida_activa.estadisticas['puntuacio'], partida_activa.estadisticas)
 
-    return {**estadisticas, "resultado": resultado, "victoria": victoria}
+    return {**partida_activa.estadisticas, "resultado": resultado, "victoria": victoria}
 
+@app.post("/abandonar")
+async def abandonar_partida(partida_id: str):
+    if partida_id in partidas_activas:
+        partida_activa = partidas_activas[partida_id]
 
-@app.get("/top10")
-async def top10():
-    """Devuelve el top 10 de jugadores con mayor puntuación."""
-    resultados = []
-    for f in os.listdir(LOG_DIR):
-        with open(os.path.join(LOG_DIR, f)) as archivo:
-            data = json.load(archivo)
-            if "final" in data:
-                resultados.append({
-                    "jugador": data["jugador"],
-                    "puntuacion": data["final"]["puntuacion"],
-                    "fecha": data["fecha_inicio"]
-                })
-    resultados.sort(key=lambda x: x["puntuacion"], reverse=True)
-    return resultados[:10]
+        if not partida_activa.finalizada:
+            partida_activa.finalizada = True
+            finalizar_log(partida_id, partida_activa.jugador, False, 
+                        partida_activa.estadisticas['puntuacio'], partida_activa.estadisticas)
+            
+        del partidas_activas[partida_id]
+        return {"mensaje": "Partida abandonada"}
+    raise HTTPException(status_code=404, detail="Partida no encontrada")
+
 @app.get("/ranking")
 async def get_ranking():
     registros = []
@@ -290,6 +304,24 @@ async def estadisticas_globales():
 
 @app.get("/top5")
 async def top5():
-    """Devuelve el top 5 de jugadores"""
     stats = load_stats()
     return stats.get("top_players", [])
+
+
+app.get("/obtenerEstado")
+async def obtener_estado(partida_id: str):
+    if partida_id not in partidas_activas:
+        raise HTTPException(status_code=404, detail="Partida no encontrada")
+    
+    partida_activa = partidas_activas[partida_id]
+    
+    return {
+        **partida_activa.estadisticas,
+        "finalizada": partida_activa.finalizada,
+        "jugador": partida_activa.jugador
+    }
+
+@app.post("/reiniciarEstadisticas")
+async def reiniciar_estadisticas():
+    save_stats(DEFAULT_STATS.copy())
+    return {"mensaje": "Estadísticas reiniciadas correctamente"}

@@ -2,6 +2,7 @@ const API_URL = "http://localhost:8000";
 let jugador = "Anonimo";
 let totalCasillas = 0;
 let dificultad = 0;
+let partidaActualId = null;
 
 let bloc1, bloc2, bloc3, blocRanking, tableroDiv, mensajeVictoria, sonidos = {};
 
@@ -36,10 +37,6 @@ function registrarMovimiento(texto) {
     lista.prepend(li);
 }
 
-
-
-
-
 async function cargarRanking() {
     try {
         const res = await fetch(`${API_URL}/ranking`);
@@ -73,11 +70,14 @@ document.getElementById('btnComencar').addEventListener('click', async () => {
     jugador = document.getElementById('jugador').value || "Anònim";
 
     try {
-        await fetch(`${API_URL}/crearPartida`, {
+        const response = await fetch(`${API_URL}/crearPartida`, {
             method:'POST',
             headers:{'Content-Type':'application/json'},
             body: JSON.stringify({filas,columnas,jugador})
         });
+        const data = await response.json();
+        partidaActualId = data.id_partida;
+
         mostrarBlocs(filas,columnas);
         cargarRanking();
     } catch(e){console.error(e);}
@@ -86,6 +86,8 @@ document.getElementById('btnComencar').addEventListener('click', async () => {
 document.getElementById('btnAbandonar').addEventListener('click', reiniciarJuego);
 
 function reiniciarJuego() {
+    partidaActualId = null;
+
     bloc2.style.display = "none";
     bloc3.style.display = "none";
     blocRanking.style.display = "none";
@@ -99,6 +101,15 @@ function reiniciarJuego() {
     document.getElementById('puntuacio').textContent = "0";
 
     mensajeVictoria.style.display = "none";
+
+    try {
+        fetch(`${API_URL}/abandonar`, {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({partida_id: partidaActualId})
+        });
+    } catch (e) {console.error(e);}
+    console.log("Juego reiniciado");
 }
 
 function mostrarBlocs(filas,columnas){
@@ -146,8 +157,14 @@ function ganar() {
 async function dispararCasilla(fila,columna,casilla){
     if(casilla.classList.contains('disparada') || casilla.classList.contains('hundido')) return;
 
+    //Validamos
+    if (!partidaActualId) {
+        alert('Error: No hay partida activa');
+        return;
+    }
+
     try{
-        const r=await fetch(`${API_URL}/disparar?fila=${fila}&columna=${columna}`,{method:'POST'});
+        const r=await fetch(`${API_URL}/disparar?fila=${fila}&columna=${columna}&partida_id=${partidaActualId}`,{method:'POST'});
         const data=await r.json();
 
         casilla.classList.add('disparada');
