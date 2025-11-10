@@ -21,6 +21,40 @@ document.addEventListener('DOMContentLoaded', () => {
         ganar: document.getElementById('win'),
         perder: document.getElementById('lose')
     };
+     // AÑADE AQUÍ EL CÓDIGO DEL MODAL
+    const btnInfoDificultad = document.getElementById('btnInfoDificultad');
+    const modalInfo = document.getElementById('modalInfo');
+    const btnCerrarModal = document.getElementById('btnCerrarModal');
+
+    if (btnInfoDificultad && modalInfo && btnCerrarModal) {
+        // Abrir modal
+        btnInfoDificultad.addEventListener('click', () => {
+            modalInfo.style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+        });
+
+        // Cerrar modal
+        function cerrarModal() {
+            modalInfo.style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+
+        btnCerrarModal.addEventListener('click', cerrarModal);
+
+        // Cerrar al hacer click fuera
+        modalInfo.addEventListener('click', (e) => {
+            if (e.target === modalInfo) {
+                cerrarModal();
+            }
+        });
+
+        // Cerrar con Escape
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && modalInfo.style.display === 'flex') {
+                cerrarModal();
+            }
+        });
+    }
 });
 
 function reproducirSonido(tipo) {

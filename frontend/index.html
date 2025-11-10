@@ -8,70 +8,119 @@
 </head>
 <body class="inicio">
 <div class="contenedor-principal">
-    <!-- Ranking -->
-    <div class="bloc bloc-ranking" id="blocRanking" style="display:none;">
-        <h2> Top 10</h2>
-        <ul id="ranking" class="ranking-list">
-            <li>Cargando...</li>
-        </ul>
-    </div>
+ <!-- Ranking -->
+<div class="bloc bloc-ranking" id="blocRanking" style="display:none;" role="complementary" aria-label="Ranking de jugadores">
+    <h2>🏆 Top 10</h2>
+    <ul id="ranking" class="ranking-list" role="list" aria-live="polite">
+        <li>Cargando...</li>
+    </ul>
+</div>
 
-    <!-- Configuración -->
-    <div class="bloc bloc-1" id="bloc1">
-        <h2>Configuració</h2>
-        <form id="formConfig">
-            <div class="form-group">
-                <label for="files">Filas (7-20):</label>
-                <input type="number" id="files" min="7" max="20" value="10" required>
-            </div>
-            <div class="form-group">
-                <label for="columnes">Columnas (7-20):</label>
-                <input type="number" id="columnes" min="7" max="20" value="10" required>
-            </div>
-            <div class="form-group">
-                <label for="jugador">Nombre (opcional):</label>
-                <input type="text" id="jugador" placeholder="Anonimo">
-            </div>
-            <div>
-                <input type="radio" id="facil" name="dificultat" value="1" checked/>
-                <label for="facil">Fàcil</label>
-                <input type="radio" id="mitja" name="dificultat" value="2" />
-                <label for="mitja">Mitjana</label>
-                <input type="radio" id="dificil" name="dificultat" value="3" />
-                <label for="dificil">Difícil</label>
-            </div>
-            <button type="button" id="btnComencar" class="btn-primary">Començar Partida</button>
-        </form>
-        <div class="banner">
-            <p>¡Elimina la flota enemiga!</p>
+<!-- Configuración -->
+<div class="bloc bloc-1" id="bloc1" role="main">
+    <h2>Configuració</h2>
+    <form id="formConfig">
+        <div class="form-group">
+            <label for="files">Filas (7-20):</label>
+            <input type="number" id="files" min="7" max="20" value="10" required>
         </div>
-    </div>
-
-    <!-- Tablero -->
-    <div class="bloc bloc-2" id="bloc2" style="display:none;">
-        <div id="tablero" class="tablero"></div>
-    </div>
-
-    <!-- Estadísticas -->
-    <div class="bloc bloc-3" id="bloc3" style="display:none;">
-        <h2>📊 Estadístiques</h2>
-        <div class="stat"><span class="stat-label">Dispars:</span><span class="stat-value" id="dispars">0</span></div>
-        <div class="stat"><span class="stat-label">Encerts:</span><span class="stat-value" id="encerts">0</span></div>
-        <div class="stat"><span class="stat-label">Vaixells enfonsats:</span><span class="stat-value" id="enfonsats">0</span></div>
-        <div class="stat"><span class="stat-label">Puntuació:</span><span class="stat-value" id="puntuacio">0</span></div>
-        <button class="btn-secondary" id="btnAbandonar">Abandonar</button>
-        <div id="registroMovimientos" class="registro-movimientos">
-            <h3>Registro de movimientos</h3>
-            <ul id="listaMovimientos"></ul>
+        <div class="form-group">
+            <label for="columnes">Columnas (7-20):</label>
+            <input type="number" id="columnes" min="7" max="20" value="10" required>
         </div>
+        <div class="form-group">
+            <label for="jugador">Nombre (opcional):</label>
+            <input type="text" id="jugador" placeholder="Anonimo">
+        </div>
+        <fieldset>
+    <legend>Dificultad</legend>
+    <div>
+        <input type="radio" id="facil" name="dificultat" value="1" checked/>
+        <label for="facil">Fàcil</label>
+        <input type="radio" id="mitja" name="dificultat" value="2" />
+        <label for="mitja">Mitjana</label>
+        <input type="radio" id="dificil" name="dificultat" value="3" />
+        <label for="dificil">Difícil</label>
+        <button type="button" id="btnInfoDificultad" class="btn-info" aria-label="Información sobre dificultades">ℹ️</button>
+    </div>
+</fieldset>
+        <button type="button" id="btnComencar" class="btn-primary">Començar Partida</button>
+    </form>
+    <div class="banner">
+        <p>¡Elimina la flota enemiga!</p>
     </div>
 </div>
-<div id="mensajeVictoria" style="display:none;"></div>
+
+<!-- Tablero -->
+<div class="bloc bloc-2" id="bloc2" style="display:none;" role="main" aria-label="Tablero de juego">
+    <div id="tablero" class="tablero" role="grid" aria-label="Tablero de batalla"></div>
+</div>
+
+<!-- Estadísticas -->
+<div class="bloc bloc-3" id="bloc3" style="display:none;" role="complementary" aria-label="Estadísticas">
+    <h2>📊 Estadístiques</h2>
+    <div class="stat"><span class="stat-label">Dispars:</span><span class="stat-value" id="dispars" aria-live="polite">0</span></div>
+    <div class="stat"><span class="stat-label">Encerts:</span><span class="stat-value" id="encerts" aria-live="polite">0</span></div>
+    <div class="stat"><span class="stat-label">Vaixells enfonsats:</span><span class="stat-value" id="enfonsats" aria-live="polite">0</span></div>
+    <div class="stat"><span class="stat-label">Puntuació:</span><span class="stat-value" id="puntuacio" aria-live="polite">0</span></div>
+    <button class="btn-secondary" id="btnAbandonar">Abandonar</button>
+    <div id="registroMovimientos" class="registro-movimientos" role="log" aria-label="Historial">
+        <h3>Registro de movimientos</h3>
+        <ul id="listaMovimientos" aria-live="polite"></ul>
+    </div>
+</div>
+
+<div id="mensajeVictoria" style="display:none;" role="alert" aria-live="assertive"></div>
+
 <script src="/static/app.js"></script>
     <audio id="hit" src="/static/assets/hit.mp3" preload="auto"></audio>
     <audio id="sunken" src="/static/assets/sunken.mp3" preload="auto"></audio>
     <audio id="miss" src="/static/assets/miss.mp3" preload="auto"></audio>
     <audio id="win" src="/static/assets/win.mp3" preload="auto"></audio>
     <audio id="lose" src="/static/assets/lose.mp3" preload="auto"></audio>
+
+    <!-- Modal de información -->
+<div id="modalInfo" class="modal" style="display:none;" role="dialog" aria-labelledby="modalTitle" aria-modal="true">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3 id="modalTitle">📊 Información de Dificultades</h3>
+            <button class="modal-close" id="btnCerrarModal" aria-label="Cerrar">&times;</button>
+        </div>
+        <div class="modal-body">
+            <div class="info-box">
+                <h4>🎮 Reglas del Juego</h4>
+                <p><strong>Los barcos ocupan el 30% del mapa.</strong></p>
+                <p>Debes hundirlos antes de quedarte sin disparos.</p>
+            </div>
+            
+            <div class="dificultad-item">
+                <div class="dificultad-header facil">
+                    <span class="dificultad-icono">🟢</span>
+                    <strong>Fàcil</strong>
+                </div>
+                <p>Tienes disponible el <strong>80%</strong> de las casillas del mapa como disparos.</p>
+                <p class="ejemplo">Ejemplo: En un mapa de 10×10 (100 casillas), puedes disparar hasta 80 veces.</p>
+            </div>
+            
+            <div class="dificultad-item">
+                <div class="dificultad-header mitjana">
+                    <span class="dificultad-icono">🟡</span>
+                    <strong>Mitjana</strong>
+                </div>
+                <p>Tienes disponible el <strong>65%</strong> de las casillas del mapa como disparos.</p>
+                <p class="ejemplo">Ejemplo: En un mapa de 10×10 (100 casillas), puedes disparar hasta 65 veces.</p>
+            </div>
+            
+            <div class="dificultad-item">
+                <div class="dificultad-header dificil">
+                    <span class="dificultad-icono">🔴</span>
+                    <strong>Difícil</strong>
+                </div>
+                <p>Tienes disponible el <strong>50%</strong> de las casillas del mapa como disparos.</p>
+                <p class="ejemplo">Ejemplo: En un mapa de 10×10 (100 casillas), puedes disparar hasta 50 veces.</p>
+            </div>
+        </div>
+    </div>
+</div>
 </body>
 </html>

@@ -145,28 +145,44 @@ class Tablero:
 
     def disparar(self, fila, col):
         if (fila, col) in self.disparadas:
-            return 'repetido'
-        
+            return 'repetido', None
+
         self.disparadas.add((fila, col))
         
         if self.grid[fila][col] > 0:
-            for barco in self.barcos:
+            for idx, barco in enumerate(self.barcos):
                 if (fila, col) in barco['posiciones']:
                     barco['posiciones'].remove((fila, col))
                     if not barco['posiciones']:
                         barco['hundido'] = True
-                        return 'hundido'
-                    return 'tocado'
-        return 'agua'
+                        return 'hundido', idx
+                    return 'tocado', idx
+        return 'agua', None
 
 
 # --- Funciones de log ---
-def crear_log(partida_id,jugador, filas, columnas):
+def crear_log(partida_id,jugador, filas, columnas, tablero):
+    
+    barcos_info = []
+    for idx, barco in enumerate(tablero.barcos):
+        barcos_info.append({
+            "id": idx,
+            "posiciones": [[p[0], p[1]] for p in barco['posiciones']],  
+            "tamaño": len(barco['posiciones']),
+            "hundido": barco['hundido']
+        })
+    
     log_data = {
         "id_partida": partida_id,
         "jugador": jugador,
         "filas": filas,
         "columnas": columnas,
+        "tablero": {
+            "grid": tablero.grid,
+            "barcos": barcos_info,
+            "casillas_objetivo": tablero.casillas_objetivo,
+            "casillas_ocupadas": tablero.casillas_ocupadas
+        },
         "movimientos": [],
         "fecha_inicio": datetime.now().isoformat()
     }
@@ -176,18 +192,25 @@ def crear_log(partida_id,jugador, filas, columnas):
     return partida_id
 
 
-def log_disparo(partida_id,fila, columna, resultado):
+def log_disparo(partida_id, fila, columna, resultado, barco_afectado=None):
     if not partida_id:
         return
     path = os.path.join(LOG_DIR, f"{partida_id}.json")
     with open(path, "r") as f:
         log_data = json.load(f)
-    log_data["movimientos"].append({
+    
+    movimiento = {
         "fila": fila,
         "columna": columna,
         "resultado": resultado,
         "hora": datetime.now().isoformat()
-    })
+    }
+    
+    if barco_afectado is not None:
+        movimiento["barco_id"] = barco_afectado
+    
+    log_data["movimientos"].append(movimiento)
+    
     with open(path, "w") as f:
         json.dump(log_data, f, indent=2)
 
@@ -227,7 +250,7 @@ async def crear_partida(partida: Partida):
     partida_activa = PartidaActiva(partida_id, tablero, partida.jugador)
     partidas_activas[partida_id] = partida_activa
 
-    crear_log(partida_id, partida.jugador, partida.filas, partida.columnas)
+    crear_log(partida_id, partida.jugador, partida.filas, partida.columnas, tablero)
 
     return {
         "estat": "Partida creada",
@@ -247,7 +270,7 @@ async def disparar(fila: int, columna: int, partida_id: str):
     if partida_activa.finalizada:
         raise HTTPException(status_code=400, detail="La partida ya ha finalizado")
 
-    resultado = partida_activa.tablero.disparar(fila, columna)
+    resultado, barco_id = partida_activa.tablero.disparar(fila, columna)
     partida_activa.estadisticas['dispars'] += 1
 
     if resultado in ['tocado', 'hundido']:
@@ -256,7 +279,7 @@ async def disparar(fila: int, columna: int, partida_id: str):
         partida_activa.estadisticas['vaixells_hundidos'] += 1
     partida_activa.estadisticas['puntuacio'] = partida_activa.estadisticas['encerts'] * 10
 
-    log_disparo(partida_id, fila, columna, resultado)
+    log_disparo(partida_id, fila, columna, resultado, barco_id)
 
     victoria = partida_activa.estadisticas['vaixells_hundidos'] == len(partida_activa.tablero.barcos)
 

@@ -373,3 +373,171 @@ body {
     color: #e94560;
     font-weight: bold;
 }
+
+/* Botón info */
+.btn-info {
+    background: #2196f3;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 28px;
+    height: 28px;
+    font-size: 1em;
+    cursor: pointer;
+    margin-left: 10px;
+    transition: all 0.3s;
+    vertical-align: middle;
+}
+
+.btn-info:hover {
+    background: #1976d2;
+    transform: scale(1.1);
+}
+
+/* Modal */
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    animation: fadeIn 0.3s;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.modal-content {
+    background: white;
+    border-radius: 12px;
+    max-width: 500px;
+    width: 90%;
+    max-height: 80vh;
+    overflow-y: auto;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+    animation: slideIn 0.3s;
+}
+
+@keyframes slideIn {
+    from { 
+        opacity: 0;
+        transform: translateY(-50px);
+    }
+    to { 
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    border-bottom: 2px solid #e0e0e0;
+}
+
+.modal-header h3 {
+    margin: 0;
+    color: #333;
+}
+
+.modal-close {
+    background: none;
+    border: none;
+    font-size: 2em;
+    color: #999;
+    cursor: pointer;
+    line-height: 1;
+    padding: 0;
+    width: 30px;
+    height: 30px;
+    transition: color 0.3s;
+}
+
+.modal-close:hover {
+    color: #333;
+}
+
+.modal-body {
+    padding: 20px;
+}
+
+.info-box {
+    background: #e3f2fd;
+    border-left: 4px solid #2196f3;
+    padding: 15px;
+    margin-bottom: 20px;
+    border-radius: 4px;
+}
+
+.info-box h4 {
+    margin: 0 0 10px 0;
+    color: #1976d2;
+}
+
+.info-box p {
+    margin: 5px 0;
+    color: #000000;  /* AÑADE ESTO: texto negro */
+}
+
+.info-box strong {
+    color: #000000;  /* AÑADE ESTO: negrita negra */
+}
+
+.dificultad-item {
+    margin-bottom: 20px;
+    padding: 15px;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    transition: all 0.3s;
+}
+
+.dificultad-item:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    transform: translateY(-2px);
+}
+
+.dificultad-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 10px;
+}
+
+.dificultad-header.facil {
+    color: #4caf50;
+}
+
+.dificultad-header.mitjana {
+    color: #ff9800;
+}
+
+.dificultad-header.dificil {
+    color: #f44336;
+}
+
+.dificultad-icono {
+    font-size: 1.3em;
+}
+
+.dificultad-item p {
+    margin: 8px 0;
+    color: #555;
+}
+
+.ejemplo {
+    font-size: 0.9em;
+    color: #777;
+    font-style: italic;
+    background: #f5f5f5;
+    padding: 8px;
+    border-radius: 4px;
+}
