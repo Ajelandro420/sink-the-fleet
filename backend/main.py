@@ -37,7 +37,6 @@ STATS_PATH = os.path.join(DATA_DIR, "stats.json")
 # Crea la carpeta "data" si no existe
 os.makedirs(DATA_DIR, exist_ok=True)
 
-# Datos por defecto si no hay archivo
 DEFAULT_STATS = {
     "total_partidas": 0,
     "mejor_puntuacion": 0,
@@ -47,7 +46,6 @@ DEFAULT_STATS = {
     "top_players": []  # top 5
 }
 
-# Cargar estadísticas o crear
 def load_stats():
     if not os.path.exists(STATS_PATH):
         with open(STATS_PATH, "w") as f:
@@ -56,12 +54,10 @@ def load_stats():
     with open(STATS_PATH, "r") as f:
         return json.load(f)
 
-# Guardar estadísticas actualizadas
 def save_stats(stats):
     with open(STATS_PATH, "w") as f:
         json.dump(stats, f, indent=2)
 
-# Actualizar estadísticas al finalizar partida
 def actualizar_estadisticas_globales(jugador, puntuacion, dispars, encerts):
     stats = load_stats()
     stats["total_partidas"] += 1
@@ -232,7 +228,6 @@ def finalizar_log(partida_id, jugador, victoria, puntuacion, estadisticas):
     with open(path, "w") as f:
         json.dump(log_data, f, indent=2)
     
-    # Ahora usa el parámetro estadisticas que recibe
     dispars = estadisticas.get("dispars", 0)
     encerts = estadisticas.get("encerts", 0)
     actualizar_estadisticas_globales(jugador, puntuacion, dispars, encerts)
@@ -277,7 +272,13 @@ async def disparar(fila: int, columna: int, partida_id: str):
         partida_activa.estadisticas['encerts'] += 1
     if resultado == 'hundido':
         partida_activa.estadisticas['vaixells_hundidos'] += 1
-    partida_activa.estadisticas['puntuacio'] = partida_activa.estadisticas['encerts'] * 10
+
+    puntuacion_base = 1000
+    costo_disparo = partida_activa.estadisticas['dispars'] * 10
+    bonus_encerts = partida_activa.estadisticas['encerts'] * 20
+    bonus_hundidos = partida_activa.estadisticas['vaixells_hundidos'] * 50
+
+    partida_activa.estadisticas['puntuacio'] = max(0, puntuacion_base - costo_disparo + bonus_encerts + bonus_hundidos)
 
     log_disparo(partida_id, fila, columna, resultado, barco_id)
 
@@ -296,6 +297,7 @@ async def abandonar_partida(partida_id: str):
         partida_activa = partidas_activas[partida_id]
 
         if not partida_activa.finalizada:
+            partida_activa.estadisticas['puntuacio'] = 0
             partida_activa.finalizada = True
             finalizar_log(partida_id, partida_activa.jugador, False, 
                         partida_activa.estadisticas['puntuacio'], partida_activa.estadisticas)
@@ -319,7 +321,7 @@ async def get_ranking():
                 })
     registros.sort(key=lambda x: x["puntuacion"], reverse=True)
     return registros[:10]
-# Endpoints de estadisticas globales
+
 @app.get("/estadisticas")
 async def estadisticas_globales():
     """Devuelve las estadísticas guardadas en data/stats.json"""

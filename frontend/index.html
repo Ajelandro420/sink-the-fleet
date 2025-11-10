@@ -58,11 +58,11 @@
 
 <!-- Estadísticas -->
 <div class="bloc bloc-3" id="bloc3" style="display:none;" role="complementary" aria-label="Estadísticas">
-    <h2>📊 Estadístiques</h2>
-    <div class="stat"><span class="stat-label">Dispars:</span><span class="stat-value" id="dispars" aria-live="polite">0</span></div>
-    <div class="stat"><span class="stat-label">Encerts:</span><span class="stat-value" id="encerts" aria-live="polite">0</span></div>
-    <div class="stat"><span class="stat-label">Vaixells enfonsats:</span><span class="stat-value" id="enfonsats" aria-live="polite">0</span></div>
-    <div class="stat"><span class="stat-label">Puntuació:</span><span class="stat-value" id="puntuacio" aria-live="polite">0</span></div>
+    <h2>📊 Estadísticass</h2>
+    <div class="stat"><span class="stat-label">Disparos:</span><span class="stat-value" id="dispars" aria-live="polite">0</span></div>
+    <div class="stat"><span class="stat-label">Aciertos:</span><span class="stat-value" id="encerts" aria-live="polite">0</span></div>
+    <div class="stat"><span class="stat-label">Barcos hundidos:</span><span class="stat-value" id="enfonsats" aria-live="polite">0</span></div>
+    <div class="stat"><span class="stat-label">Puntuación:</span><span class="stat-value" id="puntuacio" aria-live="polite">1000</span></div>
     <button class="btn-secondary" id="btnAbandonar">Abandonar</button>
     <div id="registroMovimientos" class="registro-movimientos" role="log" aria-label="Historial">
         <h3>Registro de movimientos</h3>
@@ -88,15 +88,16 @@
         </div>
         <div class="modal-body">
             <div class="info-box">
-                <h4>🎮 Reglas del Juego</h4>
+                <h4>Reglas del Juego</h4>
                 <p><strong>Los barcos ocupan el 30% del mapa.</strong></p>
                 <p>Debes hundirlos antes de quedarte sin disparos.</p>
+                <p class="ejemplo">No hemos seguido la derrota por >50% casillas y barcos restantes debido al desnivel en dificultad, hemos implementado un sistema de dificultad mas balanceado.</p>
             </div>
             
             <div class="dificultad-item">
                 <div class="dificultad-header facil">
                     <span class="dificultad-icono">🟢</span>
-                    <strong>Fàcil</strong>
+                    <strong>Facil</strong>
                 </div>
                 <p>Tienes disponible el <strong>80%</strong> de las casillas del mapa como disparos.</p>
                 <p class="ejemplo">Ejemplo: En un mapa de 10×10 (100 casillas), puedes disparar hasta 80 veces.</p>
@@ -105,7 +106,7 @@
             <div class="dificultad-item">
                 <div class="dificultad-header mitjana">
                     <span class="dificultad-icono">🟡</span>
-                    <strong>Mitjana</strong>
+                    <strong>Media</strong>
                 </div>
                 <p>Tienes disponible el <strong>65%</strong> de las casillas del mapa como disparos.</p>
                 <p class="ejemplo">Ejemplo: En un mapa de 10×10 (100 casillas), puedes disparar hasta 65 veces.</p>
@@ -114,7 +115,7 @@
             <div class="dificultad-item">
                 <div class="dificultad-header dificil">
                     <span class="dificultad-icono">🔴</span>
-                    <strong>Difícil</strong>
+                    <strong>Dificil</strong>
                 </div>
                 <p>Tienes disponible el <strong>50%</strong> de las casillas del mapa como disparos.</p>
                 <p class="ejemplo">Ejemplo: En un mapa de 10×10 (100 casillas), puedes disparar hasta 50 veces.</p>
