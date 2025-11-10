@@ -72,6 +72,50 @@
 
 <div id="mensajeVictoria" style="display:none;" role="alert" aria-live="assertive"></div>
 
+<!-- Modal de información -->
+<div id="modalInfo" class="modal" style="display:none;" role="dialog" aria-labelledby="modalTitle" aria-modal="true">
+<div class="modal-content">
+    <div class="modal-header">
+        <h3 id="modalTitle">📊 Información de Dificultades</h3>
+        <button class="modal-close" id="btnCerrarModal" aria-label="Cerrar">&times;</button>
+    </div>
+    <div class="modal-body">
+        <div class="info-box">
+            <h4>Reglas del Juego</h4>
+            <p><strong>Los barcos ocupan el 30% del mapa.</strong></p>
+            <p>Debes hundirlos antes de quedarte sin disparos.</p>
+            <p class="ejemplo">No hemos seguido la derrota por >50% casillas y barcos restantes debido al desnivel en dificultad, hemos implementado un sistema de dificultad mas balanceado.</p>
+        </div>
+        
+        <div class="dificultad-item">
+            <div class="dificultad-header facil">
+                <span class="dificultad-icono">🟢</span>
+                <strong>Facil</strong>
+            </div>
+            <p>Tienes disponible el <strong>80%</strong> de las casillas del mapa como disparos.</p>
+            <p class="ejemplo">Ejemplo: En un mapa de 10×10 (100 casillas), puedes disparar hasta 80 veces.</p>
+        </div>
+        
+        <div class="dificultad-item">
+            <div class="dificultad-header mitjana">
+                <span class="dificultad-icono">🟡</span>
+                <strong>Media</strong>
+            </div>
+            <p>Tienes disponible el <strong>65%</strong> de las casillas del mapa como disparos.</p>
+            <p class="ejemplo">Ejemplo: En un mapa de 10×10 (100 casillas), puedes disparar hasta 65 veces.</p>
+        </div>
+        
+        <div class="dificultad-item">
+            <div class="dificultad-header dificil">
+                <span class="dificultad-icono">🔴</span>
+                <strong>Dificil</strong>
+            </div>
+            <p>Tienes disponible el <strong>50%</strong> de las casillas del mapa como disparos.</p>
+            <p class="ejemplo">Ejemplo: En un mapa de 10×10 (100 casillas), puedes disparar hasta 50 veces.</p>
+        </div>
+    </div>
+</div>
+
 <script src="/static/app.js"></script>
     <audio id="hit" src="/static/assets/hit.mp3" preload="auto"></audio>
     <audio id="sunken" src="/static/assets/sunken.mp3" preload="auto"></audio>
@@ -79,49 +123,6 @@
     <audio id="win" src="/static/assets/win.mp3" preload="auto"></audio>
     <audio id="lose" src="/static/assets/lose.mp3" preload="auto"></audio>
 
-    <!-- Modal de información -->
-<div id="modalInfo" class="modal" style="display:none;" role="dialog" aria-labelledby="modalTitle" aria-modal="true">
-    <div class="modal-content">
-        <div class="modal-header">
-            <h3 id="modalTitle">📊 Información de Dificultades</h3>
-            <button class="modal-close" id="btnCerrarModal" aria-label="Cerrar">&times;</button>
-        </div>
-        <div class="modal-body">
-            <div class="info-box">
-                <h4>Reglas del Juego</h4>
-                <p><strong>Los barcos ocupan el 30% del mapa.</strong></p>
-                <p>Debes hundirlos antes de quedarte sin disparos.</p>
-                <p class="ejemplo">No hemos seguido la derrota por >50% casillas y barcos restantes debido al desnivel en dificultad, hemos implementado un sistema de dificultad mas balanceado.</p>
-            </div>
-            
-            <div class="dificultad-item">
-                <div class="dificultad-header facil">
-                    <span class="dificultad-icono">🟢</span>
-                    <strong>Facil</strong>
-                </div>
-                <p>Tienes disponible el <strong>80%</strong> de las casillas del mapa como disparos.</p>
-                <p class="ejemplo">Ejemplo: En un mapa de 10×10 (100 casillas), puedes disparar hasta 80 veces.</p>
-            </div>
-            
-            <div class="dificultad-item">
-                <div class="dificultad-header mitjana">
-                    <span class="dificultad-icono">🟡</span>
-                    <strong>Media</strong>
-                </div>
-                <p>Tienes disponible el <strong>65%</strong> de las casillas del mapa como disparos.</p>
-                <p class="ejemplo">Ejemplo: En un mapa de 10×10 (100 casillas), puedes disparar hasta 65 veces.</p>
-            </div>
-            
-            <div class="dificultad-item">
-                <div class="dificultad-header dificil">
-                    <span class="dificultad-icono">🔴</span>
-                    <strong>Dificil</strong>
-                </div>
-                <p>Tienes disponible el <strong>50%</strong> de las casillas del mapa como disparos.</p>
-                <p class="ejemplo">Ejemplo: En un mapa de 10×10 (100 casillas), puedes disparar hasta 50 veces.</p>
-            </div>
-        </div>
-    </div>
 </div>
 </body>
 </html>

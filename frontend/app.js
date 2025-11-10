@@ -164,7 +164,20 @@ function generarTablero(filas,columnas){
             c.className='casilla';
             c.dataset.fila=i;
             c.dataset.columna=j;
+
+            c.setAttribute('role', 'button');  
+            c.setAttribute('aria-label', `Casilla fila ${i+1}, columna ${j+1}`);  
+            c.setAttribute('tabindex', '0');  
+            
             c.addEventListener('click',()=>dispararCasilla(i,j,c));
+            
+            c.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    dispararCasilla(i, j, c);
+                }
+            });
+
             tableroDiv.appendChild(c);
         }
     }
@@ -211,6 +224,9 @@ async function dispararCasilla(fila,columna,casilla){
         else if(data.resultado==='tocado') {
             casilla.classList.add('tocado');
             casilla.textContent='💥';
+
+            casilla.setAttribute('aria-label', `Tocado en fila ${fila+1}, columna ${columna+1}`);  
+
             reproducirSonido('tocado');
             registrarMovimiento(`💥 Tocado en (${fila+1}, ${columna+1})`);
 
@@ -218,12 +234,18 @@ async function dispararCasilla(fila,columna,casilla){
         else if(data.resultado==='hundido') {
             casilla.classList.add('hundido');
             casilla.textContent='☠️';
+
+            casilla.setAttribute('aria-label', `Hundido en fila ${fila+1}, columna ${columna+1}`);  
+
             reproducirSonido('hundido');
             registrarMovimiento(`☠️ Hundido en (${fila+1}, ${columna+1})`);
         }
         else {
             casilla.classList.add('agua');
             casilla.textContent='💧';
+
+            casilla.setAttribute('aria-label', `Agua en fila ${fila+1}, columna ${columna+1}`);  
+
             reproducirSonido('agua');
             registrarMovimiento(`💧 Agua en (${fila+1}, ${columna+1})`);
         }

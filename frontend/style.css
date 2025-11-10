@@ -118,9 +118,15 @@ body {
     user-select: none;
 }
 
+.casilla:focus {
+    outline: 3px solid #FFD700;
+    outline-offset: 2px;
+    box-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+}
 
-
-
+.casilla:focus:not(:focus-visible) {
+    outline: none;
+}
 
 .casilla:hover {
     background: #3d6cb9;
