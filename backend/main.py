@@ -236,8 +236,11 @@ def finalizar_log(partida_id, jugador, victoria, puntuacion, estadisticas):
 async def prova():
     return {"estat": "ok"}
 
+
 @app.post("/crearPartida")
 async def crear_partida(partida: Partida):
+    print(f"[LOG] Creando partida para jugador: {partida.jugador}")  # 👈 añadido
+
     partida_id = str(uuid.uuid4())
     tablero = Tablero(partida.filas, partida.columnas)
     tablero.generar_barcos_basicos()
@@ -247,6 +250,7 @@ async def crear_partida(partida: Partida):
 
     crear_log(partida_id, partida.jugador, partida.filas, partida.columnas, tablero)
 
+    print(f"[LOG] Partida creada con ID: {partida_id} ({partida.filas}x{partida.columnas})")  # 👈 añadido
     return {
         "estat": "Partida creada",
         "filas": partida.filas,
@@ -255,8 +259,11 @@ async def crear_partida(partida: Partida):
         "id_partida": partida_id
     }
 
+
 @app.post("/disparar")
 async def disparar(fila: int, columna: int, partida_id: str):
+    print(f"[LOG] Disparo recibido: partida={partida_id}, fila={fila}, columna={columna}")
+
     if partida_id not in partidas_activas:
         raise HTTPException(status_code=404, detail="Partida no encontrada")
 
@@ -285,42 +292,56 @@ async def disparar(fila: int, columna: int, partida_id: str):
     victoria = partida_activa.estadisticas['vaixells_hundidos'] == len(partida_activa.tablero.barcos)
 
     if victoria:
+        print(
+            f"[LOG] Partida {partida_id} ganada por {partida_activa.jugador} con puntuación {partida_activa.estadisticas['puntuacio']}")
         partida_activa.finalizada = True
-        finalizar_log(partida_id, partida_activa.jugador, victoria, 
-                    partida_activa.estadisticas['puntuacio'], partida_activa.estadisticas)
+        finalizar_log(partida_id, partida_activa.jugador, victoria,
+                      partida_activa.estadisticas['puntuacio'], partida_activa.estadisticas)
 
+    print(
+        f"[LOG] Resultado disparo: {resultado} | Puntuación actual: {partida_activa.estadisticas['puntuacio']}")
     return {**partida_activa.estadisticas, "resultado": resultado, "victoria": victoria}
+
 
 @app.post("/abandonar")
 async def abandonar_partida(partida_id: str):
+    print(f"[LOG] Jugador abandona partida: {partida_id}")
+
     if partida_id in partidas_activas:
         partida_activa = partidas_activas[partida_id]
 
         if not partida_activa.finalizada:
             partida_activa.estadisticas['puntuacio'] = 0
             partida_activa.finalizada = True
-            finalizar_log(partida_id, partida_activa.jugador, False, 
-                        partida_activa.estadisticas['puntuacio'], partida_activa.estadisticas)
-            
+            finalizar_log(partida_id, partida_activa.jugador, False,
+                          partida_activa.estadisticas['puntuacio'], partida_activa.estadisticas)
+
         del partidas_activas[partida_id]
+        print(f"[LOG] Partida {partida_id} eliminada del registro activo")
         return {"mensaje": "Partida abandonada"}
+
     raise HTTPException(status_code=404, detail="Partida no encontrada")
+
 
 @app.get("/ranking")
 async def get_ranking():
+    print("[LOG] Solicitando ranking global...")
     registros = []
     for file in os.listdir(LOG_DIR):
         if file.endswith(".json"):
             path = os.path.join(LOG_DIR, file)
             with open(path, "r") as f:
                 data = json.load(f)
-                puntuacion = len([m for m in data.get("movimientos", []) if m["resultado"] in ["tocado", "hundido"]]) * 10
+                puntuacion = len(
+                    [m for m in data.get("movimientos", []) if m["resultado"] in ["tocado", "hundido"]]) * 10
                 registros.append({
                     "jugador": data.get("jugador", "Anònim"),
                     "puntuacion": puntuacion
                 })
     registros.sort(key=lambda x: x["puntuacion"], reverse=True)
+    print(f"[LOG] Ranking generado con {len(registros)} jugadores")
     return registros[:10]
+
 
 @app.get("/estadisticas")
 async def estadisticas_globales():
