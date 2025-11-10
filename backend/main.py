@@ -239,7 +239,7 @@ async def prova():
 
 @app.post("/crearPartida")
 async def crear_partida(partida: Partida):
-    print(f"[LOG] Creando partida para jugador: {partida.jugador}")  # 👈 añadido
+    print(f"[LOG] Creando partida para jugador: {partida.jugador}")
 
     partida_id = str(uuid.uuid4())
     tablero = Tablero(partida.filas, partida.columnas)
@@ -250,7 +250,7 @@ async def crear_partida(partida: Partida):
 
     crear_log(partida_id, partida.jugador, partida.filas, partida.columnas, tablero)
 
-    print(f"[LOG] Partida creada con ID: {partida_id} ({partida.filas}x{partida.columnas})")  # 👈 añadido
+    print(f"[LOG] Partida creada con ID: {partida_id} ({partida.filas}x{partida.columnas})")
     return {
         "estat": "Partida creada",
         "filas": partida.filas,
@@ -296,7 +296,7 @@ async def disparar(fila: int, columna: int, partida_id: str):
             f"[LOG] Partida {partida_id} ganada por {partida_activa.jugador} con puntuación {partida_activa.estadisticas['puntuacio']}")
         partida_activa.finalizada = True
         finalizar_log(partida_id, partida_activa.jugador, victoria,
-                      partida_activa.estadisticas['puntuacio'], partida_activa.estadisticas)
+                    partida_activa.estadisticas['puntuacio'], partida_activa.estadisticas)
 
     print(
         f"[LOG] Resultado disparo: {resultado} | Puntuación actual: {partida_activa.estadisticas['puntuacio']}")
@@ -314,7 +314,7 @@ async def abandonar_partida(partida_id: str):
             partida_activa.estadisticas['puntuacio'] = 0
             partida_activa.finalizada = True
             finalizar_log(partida_id, partida_activa.jugador, False,
-                          partida_activa.estadisticas['puntuacio'], partida_activa.estadisticas)
+                        partida_activa.estadisticas['puntuacio'], partida_activa.estadisticas)
 
         del partidas_activas[partida_id]
         print(f"[LOG] Partida {partida_id} eliminada del registro activo")
