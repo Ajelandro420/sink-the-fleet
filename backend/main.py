@@ -239,7 +239,7 @@ async def prova():
 
 @app.post("/crearPartida")
 async def crear_partida(partida: Partida):
-    print(f"[LOG] Creando partida para jugador: {partida.jugador}")  # 👈 añadido
+    print(f"[LOG] Creando partida para jugador: {partida.jugador}")  
 
     partida_id = str(uuid.uuid4())
     tablero = Tablero(partida.filas, partida.columnas)
@@ -250,7 +250,7 @@ async def crear_partida(partida: Partida):
 
     crear_log(partida_id, partida.jugador, partida.filas, partida.columnas, tablero)
 
-    print(f"[LOG] Partida creada con ID: {partida_id} ({partida.filas}x{partida.columnas})")  # 👈 añadido
+    print(f"[LOG] Partida creada con ID: {partida_id} ({partida.filas}x{partida.columnas})")  
     return {
         "estat": "Partida creada",
         "filas": partida.filas,
