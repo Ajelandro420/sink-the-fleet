@@ -1,0 +1,41 @@
+name: Test FastAPI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout código
+      uses: actions/checkout@v3
+    
+    - name: Configurar Python 3.11
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+    
+    - name: Instalar dependencias
+      run: |
+        pip install fastapi uvicorn pydantic
+    
+    - name: Verificar sintaxis Python
+      run: |
+        python -m py_compile backend/main.py
+    
+    - name: Iniciar servidor de prueba
+      run: |
+        cd backend
+        timeout 10s uvicorn main:app --host 0.0.0.0 --port 8000 || true
+    
+    - name: Test endpoint /prova
+      run: |
+        cd backend
+        uvicorn main:app --host 0.0.0.0 --port 8000 &
+        sleep 5
+        curl http://localhost:8000/prova
+        echo "✅ Servidor funciona correctamente"
