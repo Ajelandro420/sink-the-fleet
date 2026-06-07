@@ -1,0 +1,31 @@
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile.backend
+    container_name: hundir-backend
+    volumes:
+      - data_volume:/app/data
+      - logs_volume:/app/logs
+    networks:
+      - hundir-net
+
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile.frontend
+    container_name: hundir-frontend
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+    networks:
+      - hundir-net
+
+networks:
+  hundir-net:
+    driver: bridge
+
+volumes:
+  data_volume:
+  logs_volume:

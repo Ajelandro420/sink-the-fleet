@@ -1,4 +1,4 @@
-const API_URL = "http://localhost:8000";
+const API_URL = "";
 let jugador = "Anonimo";
 let totalCasillas = 0;
 let dificultad = 0;

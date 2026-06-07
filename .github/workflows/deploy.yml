@@ -1,0 +1,128 @@
+# =============================================================================
+# WORKFLOW: Desplegament del projecte "Hundir la Flota"
+# Aquest workflow desplega el projecte en 2 contenidors Docker (Frontend i Backend)
+# i exposa el Frontend a Internet mitjancant un tunel Ngrok durant 10 minuts.
+# =============================================================================
+
+name: Desplegar Hundir la Flota
+
+# ---------------------------------------------------------------------------
+# TRIGGER: Nomes s'executa manualment desde la pestanya "Actions" de GitHub.
+# Aixo permet que el professor pugui llençar el workflow quan vulgui.
+# ---------------------------------------------------------------------------
+on:
+  workflow_dispatch:
+
+jobs:
+  # -------------------------------------------------------------------------
+  # JOB: deploy
+  # S'executa en un runner Ubuntu de GitHub Actions.
+  # Te un timeout de 15 minuts per evitar que quedi penjat.
+  # -------------------------------------------------------------------------
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      # -------------------------------------------------------------------
+      # PAS 1: Descarregar el codi del repositori al runner.
+      # Utiliza l'accio oficial "actions/checkout@v4".
+      # -------------------------------------------------------------------
+      - name: Descarregar codi del repositori
+        uses: actions/checkout@v4
+
+      # -------------------------------------------------------------------
+      # PAS 2: Construir i arrencar els contenidors amb Docker Compose.
+      #   - --build: Reconstruir les imatges Docker si hi ha canvis.
+      #   - -d: Executar en mode "detached" (en segon pla).
+      # Docker Compose llegeix el fitxer docker-compose.yml i:
+      #   1. Construeix la imatge del Backend (Python + FastAPI + Uvicorn)
+      #   2. Construeix la imatge del Frontend (Nginx servint fitxers estatics)
+      #   3. Crea una xarxa interna compartida (hundir-net)
+      #   4. Arrenca ambdos contenidors
+      # -------------------------------------------------------------------
+      - name: Construir i arrencar contenidors
+        run: docker compose up -d --build
+
+      # -------------------------------------------------------------------
+      # PAS 3: Esperar uns segons per assegurar que els serveis estan llestos.
+      # Donem temps a que Uvicorn arrenqui i Nginx accepti connexions.
+      # -------------------------------------------------------------------
+      - name: Esperar que els serveis estiguin preparats
+        run: |
+          sleep 5
+          echo "Verificant contenidors..."
+          docker ps
+
+      # -------------------------------------------------------------------
+      # PAS 4: Descarregar i instal·lar Ngrok.
+      # Ngrok es una eina que crea un tunel HTTP desde un servidor public
+      # fins al port 80 del runner (on esta el Frontend amb Nginx).
+      #
+      # Passos:
+      #   1. Descarregar el binari de Ngrok v3 per Linux x86_64.
+      #   2. Descomprimir el fitxer .tgz.
+      #   3. Configurar el token d'autenticacio desde els secrets de GitHub.
+      #      NGROK_AUTHTOKEN es un secret que l'usuari ha d'haver creat
+      #      a Settings > Secrets and variables > Actions del repositori.
+      # -------------------------------------------------------------------
+      - name: Descarregar i instal·lar Ngrok
+        run: |
+          curl -sSL https://bin.equinox.io/c/bNyj1mQVY4c/ngrok-v3-stable-linux-amd64.tgz -o ngrok.tgz
+          tar xzf ngrok.tgz
+          ./ngrok config add-authtoken ${{ secrets.NGROK_AUTHTOKEN }}
+          echo "Ngrok instal·lat correctament."
+
+      # -------------------------------------------------------------------
+      # PAS 5: Iniciar el tunel Ngrok i obtenir la URL publica.
+      #
+      #   1. S'executa ngrok en segon pla (&) exposant el port 80 (Frontend).
+      #      --log=stdout: Escriu els logs a la sortida estandard.
+      #      > /dev/null: Redirigeix la sortida estandard a null per no omplir logs.
+      #   2. Esperem 5 segons perque Ngrok estableixi la connexio.
+      #   3. Consultem l'API local de Ngrok (port 4040) per obtenir la URL publica.
+      #   4. Mostrem la URL per pantalla perque el professor la pugui obrir.
+      # -------------------------------------------------------------------
+      - name: Iniciar tunel Ngrok i mostrar URL publica
+        run: |
+          echo "Iniciant tunel Ngrok al port 80..."
+          ./ngrok http 80 --log=stdout > /dev/null &
+          sleep 5
+          echo ""
+          echo "=============================================="
+          echo "  URL PUBLICA DEL PROJECTE:"
+          curl -s http://127.0.0.1:4040/api/tunnels | python3 -c "
+          import sys, json
+          data = json.load(sys.stdin)
+          url = data['tunnels'][0]['public_url']
+          print(f'  {url}')
+          "
+          echo "=============================================="
+          echo ""
+          echo "Obre la URL anterior al navegador per veure el joc."
+          echo "El tunel estara actiu durant 10 minuts."
+
+      # -------------------------------------------------------------------
+      # PAS 6: Mantenir el desplegament actiu durant 10 minuts (600 segons).
+      # Durant aquest temps el professor pot obrir la URL publica i provar
+      # el funcionament del projecte.
+      # -------------------------------------------------------------------
+      - name: Mantenir en funcionament 10 minuts
+        run: |
+          echo "Desplegament actiu. Esperant 10 minuts..."
+          echo "Timestamp inici: $(date)"
+          sleep 600
+          echo "Timestamp final: $(date)"
+
+      # -------------------------------------------------------------------
+      # PAS 7: Aturar i netejar els contenidors.
+      #
+      #   if: always() -> Aquest pas s'executa SEMPRE, fins i tot si algun
+      #   pas anterior falla. Aixo evita deixar contenidors residuals al runner.
+      #
+      #   docker compose down: Atura i elimina els contenidors, la xarxa
+      #   i els volums creats.
+      # -------------------------------------------------------------------
+      - name: Aturar i netejar contenidors
+        if: always()
+        run: docker compose down -v

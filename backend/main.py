@@ -11,7 +11,8 @@ app = FastAPI()
 
 frontend_path = os.path.join(os.path.dirname(__file__), "..", "frontend")
 
-app.mount("/static", StaticFiles(directory=frontend_path), name="static")
+if os.path.isdir(frontend_path):
+    app.mount("/static", StaticFiles(directory=frontend_path), name="static")
 
 app.add_middleware(
     CORSMiddleware,
@@ -23,7 +24,9 @@ app.add_middleware(
 
 @app.get("/")
 def root():
-    return FileResponse(os.path.join(frontend_path, "index.html"))
+    if os.path.isdir(frontend_path):
+        return FileResponse(os.path.join(frontend_path, "index.html"))
+    return {"app": "Hundir la Flota API", "estat": "actiu"}
 
 # --- Carpeta de logs ---
 LOG_DIR = "logs"
