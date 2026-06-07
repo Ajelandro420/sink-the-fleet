@@ -1,7 +1,3 @@
-Document: Desplegament del Projecte "Hundir la Flota"
-Autor: [El teu nom]
-Data: Juny 2026
-
 ================================================================================
 1. ARQUITECTURA DEL DESPLEGAMENT
 ================================================================================
