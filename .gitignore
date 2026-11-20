@@ -1,0 +1,38 @@
+# Variables de entorno y secretos
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+serviceAccount*.json
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+
+# Node
+node_modules/
+dist/
+
+# Editores / sistema
+.idea/
+.vscode/*
+.DS_Store
+Thumbs.db
+.obsidian/
+
+# Logs y bases de datos locales
+*.log
+*.db
+*.sqlite
+*.sqlite3
+
+# Datos generados en ejecución (partidas y estadísticas)
+data/
+backend/data/
+
+# Notas personales de clase
+insti/
