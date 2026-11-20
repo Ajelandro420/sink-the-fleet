@@ -357,7 +357,7 @@ async def top5():
     return stats.get("top_players", [])
 
 
-app.get("/obtenerEstado")
+@app.get("/obtenerEstado")
 async def obtener_estado(partida_id: str):
     if partida_id not in partidas_activas:
         raise HTTPException(status_code=404, detail="Partida no encontrada")

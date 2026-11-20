@@ -33,6 +33,8 @@ Thumbs.db
 # Datos generados en ejecución (partidas y estadísticas)
 data/
 backend/data/
+logs/
+backend/logs/
 
 # Notas personales de clase
 insti/
